@@ -18,7 +18,15 @@ public class Temporalite {
         }
     }
 
-    public ArrayList<Periode> getEnseignementList() {
+    public ArrayList<Periode> getPeriodeList() {
         return enseignementList;
+    }
+
+    public int getNombreSemaineTotal() {
+        int total = 0;
+        for (int icpt = 0; icpt < enseignementList.size(); icpt++) {
+            total += enseignementList.get(icpt).getNombreSemaineScolaire();
+        }
+        return total;
     }
 }

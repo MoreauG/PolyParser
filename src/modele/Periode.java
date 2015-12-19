@@ -1,42 +1,47 @@
 package modele;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Weeks;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
-/**
- * Created by germa on 17/12/2015.
- */
+
 public class Periode {
+
     boolean vacance;
-    Date debut; //1er lundi
-    Date fin;
+    DateTime debut; //lundi debut
+    DateTime fin; //vendredi fin
 
     public Periode(boolean vacance, Date debut, Date fin) {
         this.vacance = vacance;
-        this.debut = debut;
-        this.fin = fin;
+        this.debut = new DateTime(debut);
+        this.fin = new DateTime(fin);
     }
 
     public boolean isVacance() {
         return vacance;
     }
 
-    public Date getDebut() {
-        return debut;
+    public long getNombreSemaineScolaire() {
+        return Weeks.weeksBetween(debut, fin).getWeeks() + 1;
     }
 
-    public Date getFin() {
-        return fin;
+    public int getNumeroSemaineDebut() {
+
+        return debut.weekOfWeekyear().get();
     }
 
-    public int getNombreJour() {
-        long tempsFin = fin.getTime();
-        long tempsDebut = debut.getTime();
-
-        return (int) ((tempsFin - tempsDebut) / (1000 * 60 * 60 * 24))+1;
+    public String getDebutenChaine() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("d/M/YYYY");
+        return dateFormat.format(debut.toDate());
     }
 
-    public int getNombreSemaine() {
-        return getNombreJour() / 7;
+    public int getNumeroSemaineFin() {
+        return fin.weekOfWeekyear().get();
     }
+
 }

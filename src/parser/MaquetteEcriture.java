@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.Locale;
 
 /**
@@ -114,16 +115,61 @@ public class MaquetteEcriture {
         plageUtile.ecrireChaine(coinSuperieur, coinInferieur, "Synthese volume travail / etudiant (h)", monStyle);
     }
 
-    private void ecrireNumeroSemaine() {
-        StyleCellule monStyle = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_GRIS_CLAIR, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
-        CoordonneesCelulle mesCoordonnes = new CoordonneesCelulle("C", 13);
-        celluleUtile.ecrireChaine(mesCoordonnes, "Numero semaine", monStyle);
-    }
+    private void ecrireDates() {
+        CoordonneesCelulle curseurNumero = new CoordonneesCelulle("C", 13);
+        CoordonneesCelulle curseurDate = new CoordonneesCelulle("C", 14);
 
-    private void ecrireDateSemaine() {
-        StyleCellule monStyle = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_GRIS_FONCE, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
-        CoordonneesCelulle mesCoordonnes = new CoordonneesCelulle("C", 14);
-        celluleUtile.ecrireChaine(mesCoordonnes, "Date semaine", monStyle);
+        StyleCellule styleNumero = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_GRIS_CLAIR, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+        StyleCellule styleDate = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_GRIS_FONCE, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+        StyleCellule vacance = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_ROUGE, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+
+        celluleUtile.ecrireChaine(curseurNumero, "Numero semaine", styleNumero);
+        celluleUtile.ecrireChaine(curseurDate, "Date semaine", styleDate);
+
+        curseurNumero = new CoordonneesCelulle("J", 13);
+        curseurDate = new CoordonneesCelulle("J", 14);
+
+        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeList();
+
+
+        for (int icpt = 0; icpt < maListe.size(); icpt++) {
+
+            Periode actuelle = maListe.get(icpt);
+            String formuleNumeroSemaine = "WEEKNUM(" + curseurDate.getxEnChaine() + "" + (curseurDate.getY() + 1) + ")";
+
+
+            if (actuelle.isVacance()) {
+                celluleUtile.ecrireFormuleDonnantNombre(curseurNumero, formuleNumeroSemaine, vacance);
+                celluleUtile.ecrireChaine(curseurDate, actuelle.getDebutenChaine(), vacance);
+            } else {
+                celluleUtile.ecrireFormuleDonnantNombre(curseurNumero, formuleNumeroSemaine, styleNumero);
+                celluleUtile.ecrireChaine(curseurDate, actuelle.getDebutenChaine(), styleDate);
+            }
+            curseurNumero = new CoordonneesCelulle(curseurNumero.getX() + 2, curseurNumero.getY() + 1);
+            curseurDate = new CoordonneesCelulle(curseurDate.getX() + 2, curseurDate.getY() + 1);
+
+
+            for (int jcpt = 0; jcpt < actuelle.getNombreSemaineScolaire() - 1; jcpt++) {
+
+                CoordonneesCelulle temporaire = new CoordonneesCelulle(curseurDate.getX(), curseurDate.getY() + 1);
+                String formuleDate = temporaire.getxEnChaine() + "" + (temporaire.getY() + 1) + "+7";
+                formuleNumeroSemaine = "WEEKNUM(" + curseurDate.getxEnChaine() + "" + (curseurDate.getY() + 1) + ")";
+
+
+                if (actuelle.isVacance()) {
+                    celluleUtile.ecrireFormuleDonnantNombre(curseurNumero, formuleNumeroSemaine, vacance);
+                    celluleUtile.ecrireFormuleDonnantDate(curseurDate, formuleDate, vacance);
+                } else {
+                    celluleUtile.ecrireFormuleDonnantNombre(curseurNumero, formuleNumeroSemaine, styleNumero);
+                    celluleUtile.ecrireFormuleDonnantDate(curseurDate, formuleDate, styleDate);
+                }
+
+                curseurNumero = new CoordonneesCelulle(curseurNumero.getX() + 2, curseurNumero.getY() + 1);
+                curseurDate = new CoordonneesCelulle(curseurDate.getX() + 2, curseurDate.getY() + 1);
+
+            }
+        }
+
     }
 
     private void ecrireCartoucheModule() {
@@ -314,8 +360,7 @@ public class MaquetteEcriture {
             ecrireCreneauDisponible();
             ecrireCreneauUtilise();
             ecrireSynthese();
-            ecrireNumeroSemaine();
-            ecrireDateSemaine();
+            ecrireDates();
             ecrireCartoucheModule();
             ecrireCartoucheRepartition();
             ecrireModule();
