@@ -4,10 +4,7 @@ import modele.*;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import utilitaire.CoordonneesCelulle;
-import utilitaire.EcritureCellule;
-import utilitaire.EcriturePlageCellule;
-import utilitaire.StyleCellule;
+import utilitaire.*;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,6 +26,7 @@ public class MaquetteEcriture {
     private EcritureCellule celluleUtile;
     private EcriturePlageCellule plageUtile;
     private static int PAS = 3;
+    private MatriceRendu maMatrice = new MatriceRendu();
 
     public MaquetteEcriture(Maquette maMaquette) {
         this.maMaquette = maMaquette;
@@ -141,10 +139,108 @@ public class MaquetteEcriture {
     }
 
     private void ecrireSynthese() {
-        StyleCellule monStyle = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_BLEU_GRIS, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
-        CoordonneesCelulle coinSuperieur = new CoordonneesCelulle("C", 9);
-        CoordonneesCelulle coinInferieur = new CoordonneesCelulle("C", 11);
-        plageUtile.ecrireChaine(coinSuperieur, coinInferieur, "Synthese volume travail / etudiant (h)", monStyle);
+        StyleCellule enTeteStyle = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_BLEU_GRIS, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+        StyleCellule cmStyle = new StyleCellule(StyleCellule.BORDURE_DOUBLE, StyleCellule.FOND_BLEU, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+        StyleCellule tdStyle = new StyleCellule(StyleCellule.BORDURE_DOUBLE, StyleCellule.FOND_VERT, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+        StyleCellule tpStyle = new StyleCellule(StyleCellule.BORDURE_DOUBLE, StyleCellule.FOND_JAUNE, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+        StyleCellule defautStyle = new StyleCellule(StyleCellule.BORDURE_DOUBLE, StyleCellule.FOND_SANS, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+
+        CoordonneesCelulle coinSuperieurSomme = new CoordonneesCelulle("C", 9);
+        CoordonneesCelulle coinInferieurSomme = new CoordonneesCelulle("C", 11);
+        String sousSommeFormule;
+        String sommmeColonne;
+        CoordonneesCelulle curseurTypeCours = new CoordonneesCelulle("J", 9);
+        CoordonneesCelulle curseurVolumeCours = new CoordonneesCelulle("J", 10);
+
+        plageUtile.ecrireChaine(coinSuperieurSomme, coinInferieurSomme, "Synthese volume travail / etudiant (h)", enTeteStyle);
+
+        coinSuperieurSomme = new CoordonneesCelulle("J", 11);
+        coinInferieurSomme = new CoordonneesCelulle(coinSuperieurSomme.getX() + PAS, coinSuperieurSomme.getY() + 1);
+
+        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeList();
+
+        for (int icpt = 0; icpt < maListe.size(); icpt++) {
+
+            Periode actuelle = maListe.get(icpt);
+            if (!actuelle.isVacance()) {
+                celluleUtile.ecrireChaine(curseurTypeCours, "CM", cmStyle);
+                curseurTypeCours.setX(curseurTypeCours.getX() + 2);
+                celluleUtile.ecrireChaine(curseurTypeCours, "TD", tdStyle);
+                curseurTypeCours.setX(curseurTypeCours.getX() + 2);
+                celluleUtile.ecrireChaine(curseurTypeCours, "TP", tpStyle);
+                curseurTypeCours.setX(curseurTypeCours.getX() + 2);
+
+                sousSommeFormule = "SUM(" + curseurVolumeCours.getxEnChaine() + (curseurVolumeCours.getY() + 1) + ":";
+
+                sommmeColonne = "SUM(" + curseurVolumeCours.getxEnChaine() + (maMatrice.getCoinHautGauche().getY() + 1) + ":" + curseurVolumeCours.getxEnChaine() + (maMatrice.getCoinBasGauche().getY() + 1) + ")";
+                celluleUtile.ecrireFormuleDonnantNombre(curseurVolumeCours, sommmeColonne, defautStyle);
+                curseurVolumeCours.setX(curseurVolumeCours.getX() + 2);
+
+                sommmeColonne = "SUM(" + curseurVolumeCours.getxEnChaine() + (maMatrice.getCoinHautGauche().getY() + 1) + ":" + curseurVolumeCours.getxEnChaine() + (maMatrice.getCoinBasGauche().getY() + 1) + ")";
+                celluleUtile.ecrireFormuleDonnantNombre(curseurVolumeCours, sommmeColonne, defautStyle);
+                curseurVolumeCours.setX(curseurVolumeCours.getX() + 2);
+
+                sommmeColonne = "SUM(" + curseurVolumeCours.getxEnChaine() + (maMatrice.getCoinHautGauche().getY() + 1) + ":" + curseurVolumeCours.getxEnChaine() + (maMatrice.getCoinBasGauche().getY() + 1) + ")";
+                sousSommeFormule += curseurVolumeCours.getxEnChaine() + (curseurVolumeCours.getY() + 1) + ")";
+                celluleUtile.ecrireFormuleDonnantNombre(curseurVolumeCours, sommmeColonne, defautStyle);
+                curseurVolumeCours.setX(curseurVolumeCours.getX() + 2);
+
+                plageUtile.ecrireFormuleDonnantNombre(coinSuperieurSomme, coinInferieurSomme, sousSommeFormule, defautStyle);
+                coinSuperieurSomme = new CoordonneesCelulle(coinSuperieurSomme.getX() + PAS + 1, coinSuperieurSomme.getY() + 1);
+                coinInferieurSomme = new CoordonneesCelulle(coinInferieurSomme.getX() + PAS + 1, coinInferieurSomme.getY() + 1);
+
+
+            } else {
+                curseurVolumeCours.setX(curseurVolumeCours.getX() + 4);
+                curseurTypeCours.setX(curseurTypeCours.getX() + 4);
+                coinSuperieurSomme = new CoordonneesCelulle(coinSuperieurSomme.getX() + PAS + 1, coinSuperieurSomme.getY() + 1);
+                coinInferieurSomme = new CoordonneesCelulle(coinInferieurSomme.getX() + PAS + 1, coinInferieurSomme.getY() + 1);
+
+            }
+
+
+            for (int jcpt = 0; jcpt < actuelle.getNombreSemaineScolaire() - 1; jcpt++) {
+                if (!actuelle.isVacance()) {
+                    sousSommeFormule = "SUM(" + curseurVolumeCours.getxEnChaine() + (curseurVolumeCours.getY() + 1) + ":";
+
+                    sommmeColonne = "SUM(" + curseurVolumeCours.getxEnChaine() + (maMatrice.getCoinHautGauche().getY() + 1) + ":" + curseurVolumeCours.getxEnChaine() + (maMatrice.getCoinBasGauche().getY() + 1) + ")";
+                    celluleUtile.ecrireFormuleDonnantNombre(curseurVolumeCours, sommmeColonne, defautStyle);
+                    curseurVolumeCours.setX(curseurVolumeCours.getX() + 2);
+
+                    sommmeColonne = "SUM(" + curseurVolumeCours.getxEnChaine() + (maMatrice.getCoinHautGauche().getY() + 1) + ":" + curseurVolumeCours.getxEnChaine() + (maMatrice.getCoinBasGauche().getY() + 1) + ")";
+                    celluleUtile.ecrireFormuleDonnantNombre(curseurVolumeCours, sommmeColonne, defautStyle);
+                    curseurVolumeCours.setX(curseurVolumeCours.getX() + 2);
+
+                    sommmeColonne = "SUM(" + curseurVolumeCours.getxEnChaine() + (maMatrice.getCoinHautGauche().getY() + 1) + ":" + curseurVolumeCours.getxEnChaine() + (maMatrice.getCoinBasGauche().getY() + 1) + ")";
+                    sousSommeFormule += curseurVolumeCours.getxEnChaine() + (curseurVolumeCours.getY() + 1) + ")";
+                    celluleUtile.ecrireFormuleDonnantNombre(curseurVolumeCours, sommmeColonne, defautStyle);
+                    curseurVolumeCours.setX(curseurVolumeCours.getX() + 2);
+
+                    plageUtile.ecrireFormuleDonnantNombre(coinSuperieurSomme, coinInferieurSomme, sousSommeFormule, defautStyle);
+                    coinSuperieurSomme = new CoordonneesCelulle(coinSuperieurSomme.getX() + PAS + 1, coinSuperieurSomme.getY() + 1);
+                    coinInferieurSomme = new CoordonneesCelulle(coinInferieurSomme.getX() + PAS + 1, coinInferieurSomme.getY() + 1);
+
+
+                    celluleUtile.ecrireChaine(curseurTypeCours, "CM", cmStyle);
+                    curseurTypeCours.setX(curseurTypeCours.getX() + 2);
+                    celluleUtile.ecrireChaine(curseurTypeCours, "TD", tdStyle);
+                    curseurTypeCours.setX(curseurTypeCours.getX() + 2);
+                    celluleUtile.ecrireChaine(curseurTypeCours, "TP", tpStyle);
+                    curseurTypeCours.setX(curseurTypeCours.getX() + 2);
+
+                } else {
+                    curseurTypeCours.setX(curseurTypeCours.getX() + 4);
+                    curseurVolumeCours.setX(curseurVolumeCours.getX() + 4);
+                    coinSuperieurSomme = new CoordonneesCelulle(coinSuperieurSomme.getX() + PAS + 1, coinSuperieurSomme.getY() + 1);
+                    coinInferieurSomme = new CoordonneesCelulle(coinInferieurSomme.getX() + PAS + 1, coinInferieurSomme.getY() + 1);
+
+                }
+
+
+            }
+
+        }
+
     }
 
     private void ecrireDates() {
@@ -206,6 +302,7 @@ public class MaquetteEcriture {
             }
         }
 
+        maMatrice.setCoinHautDroit(new CoordonneesCelulle(coinSuperieurDate.getX(), 18));
     }
 
     private void ecrireCartoucheModule() {
@@ -242,6 +339,43 @@ public class MaquetteEcriture {
 
     private void ecrireCartoucheRepartition() {
 
+        CoordonneesCelulle curseur = new CoordonneesCelulle("J", 16);
+        StyleCellule cmStyle = new StyleCellule(StyleCellule.BORDURE_SANS, StyleCellule.FOND_BLEU, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+        StyleCellule tdStyle = new StyleCellule(StyleCellule.BORDURE_SANS, StyleCellule.FOND_VERT, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+        StyleCellule tpStyle = new StyleCellule(StyleCellule.BORDURE_SANS, StyleCellule.FOND_JAUNE, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+
+        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeList();
+
+        for (int icpt = 0; icpt < maListe.size(); icpt++) {
+            Periode actuelle = maListe.get(icpt);
+
+            if (!actuelle.isVacance()) {
+                celluleUtile.ecrireChaine(curseur, "CM", cmStyle);
+                curseur = new CoordonneesCelulle(curseur.getX() + 2, curseur.getY() + 1);
+                celluleUtile.ecrireChaine(curseur, "TD", tdStyle);
+                curseur = new CoordonneesCelulle(curseur.getX() + 2, curseur.getY() + 1);
+                celluleUtile.ecrireChaine(curseur, "TP", tpStyle);
+                curseur = new CoordonneesCelulle(curseur.getX() + 2, curseur.getY() + 1);
+            } else {
+                curseur = new CoordonneesCelulle(curseur.getX() + 4, curseur.getY() + 1);
+            }
+
+            for (int jcpt = 0; jcpt < actuelle.getNombreSemaineScolaire() - 1; jcpt++) {
+
+                if (!actuelle.isVacance()) {
+                    celluleUtile.ecrireChaine(curseur, "CM", cmStyle);
+                    curseur = new CoordonneesCelulle(curseur.getX() + 2, curseur.getY() + 1);
+                    celluleUtile.ecrireChaine(curseur, "TD", tdStyle);
+                    curseur = new CoordonneesCelulle(curseur.getX() + 2, curseur.getY() + 1);
+                    celluleUtile.ecrireChaine(curseur, "TP", tpStyle);
+                    curseur = new CoordonneesCelulle(curseur.getX() + 2, curseur.getY() + 1);
+                } else {
+                    curseur = new CoordonneesCelulle(curseur.getX() + 4, curseur.getY() + 1);
+                }
+
+
+            }
+        }
     }
 
     private void ecrireModule() {
@@ -262,9 +396,10 @@ public class MaquetteEcriture {
         StyleCellule tp_volumeStyle = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_JAUNE, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
         StyleCellule controle_volumeStyle = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_ROUGE, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
         StyleCellule styleVide = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_SANS, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+        StyleCellule styleHeurePlacees = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_SANS, StyleCellule.GRAS_SANS, StyleCellule.POLICE_ROUGE);
 
         CoordonneesCelulle temporaire;
-
+        String sommeLigne;
 
         for (int icpt = 0; icpt < maMaquette.getListeUniteEnseignement().size(); icpt++) {
             UniteEnseignement monUE = maMaquette.getListeUniteEnseignement().get(icpt);
@@ -303,6 +438,9 @@ public class MaquetteEcriture {
                         temporaire = new CoordonneesCelulle("H", volumeCurseur.getY() + 1);
                         celluleUtile.ecrireChaine(temporaire, "CM", cm_volumeStyle);
 
+                        sommeLigne = "SUM(" + maMatrice.getCoinHautGauche().getxEnChaine() + (volumeCurseur.getY() + 1) + ":" + maMatrice.getCoinHautDroit().getxEnChaine() + (volumeCurseur.getY() + 1) + ")";
+                        temporaire = new CoordonneesCelulle("G", volumeCurseur.getY() + 1);
+                        celluleUtile.ecrireFormuleDonnantNombre(temporaire, sommeLigne, styleHeurePlacees);
 
                         volumeCurseur = new CoordonneesCelulle("D", volumeCurseur.getY() + 2);
                     }
@@ -318,7 +456,12 @@ public class MaquetteEcriture {
                         temporaire = new CoordonneesCelulle("H", volumeCurseur.getY() + 1);
                         celluleUtile.ecrireChaine(temporaire, "TD", td_volumeStyle);
 
+                        sommeLigne = "SUM(" + maMatrice.getCoinHautGauche().getxEnChaine() + (volumeCurseur.getY() + 1) + ":" + maMatrice.getCoinHautDroit().getxEnChaine() + (volumeCurseur.getY() + 1) + ")";
+                        temporaire = new CoordonneesCelulle("G", volumeCurseur.getY() + 1);
+                        celluleUtile.ecrireFormuleDonnantNombre(temporaire, sommeLigne, styleHeurePlacees);
                         volumeCurseur = new CoordonneesCelulle("D", volumeCurseur.getY() + 2);
+
+
                     }
                     if (maRepartition.tpPresent()) {
                         celluleUtile.ecrireNombre(volumeCurseur, maRepartition.getTpVolume(), volumeStyle);
@@ -331,6 +474,10 @@ public class MaquetteEcriture {
 
                         temporaire = new CoordonneesCelulle("H", volumeCurseur.getY() + 1);
                         celluleUtile.ecrireChaine(temporaire, "TP", tp_volumeStyle);
+
+                        sommeLigne = "SUM(" + maMatrice.getCoinHautGauche().getxEnChaine() + (volumeCurseur.getY() + 1) + ":" + maMatrice.getCoinHautDroit().getxEnChaine() + (volumeCurseur.getY() + 1) + ")";
+                        temporaire = new CoordonneesCelulle("G", volumeCurseur.getY() + 1);
+                        celluleUtile.ecrireFormuleDonnantNombre(temporaire, sommeLigne, styleHeurePlacees);
 
                         volumeCurseur = new CoordonneesCelulle("D", volumeCurseur.getY() + 2);
                     }
@@ -350,6 +497,10 @@ public class MaquetteEcriture {
                         temporaire = new CoordonneesCelulle("H", volumeCurseur.getY() + 1);
                         celluleUtile.ecrireChaine(temporaire, "CC", controle_volumeStyle);
 
+                        sommeLigne = "SUM(" + maMatrice.getCoinHautGauche().getxEnChaine() + (volumeCurseur.getY() + 1) + ":" + maMatrice.getCoinHautDroit().getxEnChaine() + (volumeCurseur.getY() + 1) + ")";
+                        temporaire = new CoordonneesCelulle("G", volumeCurseur.getY() + 1);
+                        celluleUtile.ecrireFormuleDonnantNombre(temporaire, sommeLigne, styleHeurePlacees);
+
                         volumeCurseur = new CoordonneesCelulle("D", volumeCurseur.getY() + 2);
 
                     }
@@ -366,6 +517,10 @@ public class MaquetteEcriture {
                         temporaire = new CoordonneesCelulle("H", volumeCurseur.getY() + 1);
                         celluleUtile.ecrireChaine(temporaire, "ET", controle_volumeStyle);
 
+                        sommeLigne = "SUM(" + maMatrice.getCoinHautGauche().getxEnChaine() + (volumeCurseur.getY() + 1) + ":" + maMatrice.getCoinHautDroit().getxEnChaine() + (volumeCurseur.getY() + 1) + ")";
+                        temporaire = new CoordonneesCelulle("G", volumeCurseur.getY() + 1);
+                        celluleUtile.ecrireFormuleDonnantNombre(temporaire, sommeLigne, styleHeurePlacees);
+
                         volumeCurseur = new CoordonneesCelulle("D", volumeCurseur.getY() + 2);
                     }
 
@@ -380,6 +535,7 @@ public class MaquetteEcriture {
             volumeCurseur = new CoordonneesCelulle("D", volumeCurseur.getY() + 2);
         }
 
+        maMatrice.setCoinBasGauche(new CoordonneesCelulle("J", volumeCurseur.getY() - 1));
     }
 
     /**
@@ -389,17 +545,22 @@ public class MaquetteEcriture {
         try {
 
             FileOutputStream fileOut = new FileOutputStream(maMaquette.getNomMaquette() + ".xlsx");
+            maMatrice.setCoinHautGauche(new CoordonneesCelulle("J", 18));
 
             ecrireNomMaquette();
             ecrireInfoUpdate();
             ecrireDisponibiliteEtudiant();
             ecrireCreneauDisponible();
-            //   ecrireCreneauUtilise();
-            ecrireSynthese();
+            ecrireCreneauUtilise();
+
             ecrireDates();
             ecrireCartoucheModule();
             ecrireCartoucheRepartition();
             ecrireModule();
+            ecrireSynthese();
+            //ecrire Matrice
+
+            maMatrice.setCoinBasDroit(new CoordonneesCelulle(maMatrice.getCoinHautDroit().getX() + 1, maMatrice.getCoinBasGauche().getY() + 1));
             finalise();
             monFichierExcel.write(fileOut);
             fileOut.close();
