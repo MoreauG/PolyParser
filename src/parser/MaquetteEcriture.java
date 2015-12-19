@@ -28,6 +28,7 @@ public class MaquetteEcriture {
     private Sheet maFeuille;
     private EcritureCellule celluleUtile;
     private EcriturePlageCellule plageUtile;
+    private static int PAS = 3;
 
     public MaquetteEcriture(Maquette maMaquette) {
         this.maMaquette = maMaquette;
@@ -67,37 +68,68 @@ public class MaquetteEcriture {
     }
 
     private void ecrireDisponibiliteEtudiant() {
-        CoordonneesCelulle monJeudeBase = new CoordonneesCelulle("C", 5);
-        celluleUtile.ecrireChaine(monJeudeBase, "Disponibilite / etudiant", new StyleCellule());
+
+        celluleUtile.ecrireChaine(new CoordonneesCelulle("C", 5), "Disponibilite / etudiant", new StyleCellule());
+
+        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeList();
 
         CoordonneesCelulle coinSuperieur = new CoordonneesCelulle("J", 5);
-        CoordonneesCelulle coinInferieur = new CoordonneesCelulle("L", 5);
+        CoordonneesCelulle coinInferieur = new CoordonneesCelulle(coinSuperieur.getX() + PAS, coinSuperieur.getY() + 1);
+        String formule;
 
+        for (int icpt = 0; icpt < maListe.size(); icpt++) {
 
-        int pas = coinInferieur.getX() - coinSuperieur.getX();
-
-        for (int i = 0; i < 7; i++) {
-            //Ecriture de la formule
-            plageUtile.ecrireFormuleDonnantNombre(coinSuperieur, coinInferieur, coinSuperieur.getxEnChaine() + (coinSuperieur.getY() + 2) + "*" + 2, new StyleCellule());
+            Periode actuelle = maListe.get(icpt);
+            if (!actuelle.isVacance()) {
+                formule = coinSuperieur.getxEnChaine() + (coinSuperieur.getY() + 2) + "*" + 2;
+                plageUtile.ecrireFormuleDonnantNombre(coinSuperieur, coinInferieur, formule, new StyleCellule());
+            }
             coinSuperieur.setX(coinInferieur.getX() + 2);
-            coinInferieur.setX(coinSuperieur.getX() + pas + 1);
+            coinInferieur.setX(coinSuperieur.getX() + PAS);
+
+            for (int jcpt = 0; jcpt < actuelle.getNombreSemaineScolaire() - 1; jcpt++) {
+                if (!actuelle.isVacance()) {
+                    formule = coinSuperieur.getxEnChaine() + (coinSuperieur.getY() + 2) + "*" + 2;
+                    plageUtile.ecrireFormuleDonnantNombre(coinSuperieur, coinInferieur, formule, new StyleCellule());
+
+                }
+                coinSuperieur.setX(coinInferieur.getX() + 2);
+                coinInferieur.setX(coinSuperieur.getX() + PAS);
+            }
+
         }
     }
 
     private void ecrireCreneauDisponible() {
-        CoordonneesCelulle monJeudeBase = new CoordonneesCelulle("C", 6);
-        celluleUtile.ecrireChaine(monJeudeBase, "Creneaux disponibles", new StyleCellule());
+
+        celluleUtile.ecrireChaine(new CoordonneesCelulle("C", 6), "Creneaux Disponibles", new StyleCellule());
+
+        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeList();
 
         CoordonneesCelulle coinSuperieur = new CoordonneesCelulle("J", 6);
-        CoordonneesCelulle coinInferieur = new CoordonneesCelulle("L", 6);
-
-        int pas = coinInferieur.getX() - coinSuperieur.getX();
+        CoordonneesCelulle coinInferieur = new CoordonneesCelulle(coinSuperieur.getX() + PAS, coinSuperieur.getY() + 1);
 
 
-        for (int i = 0; i < 7; i++) {
-            plageUtile.ecrireNombre(coinSuperieur, coinInferieur, maMaquette.getMaxSemaine(), new StyleCellule());
+        for (int icpt = 0; icpt < maListe.size(); icpt++) {
+
+            Periode actuelle = maListe.get(icpt);
+            if (!actuelle.isVacance()) {
+
+                plageUtile.ecrireNombre(coinSuperieur, coinInferieur, maMaquette.getMaxSemaine(), new StyleCellule());
+            }
             coinSuperieur.setX(coinInferieur.getX() + 2);
-            coinInferieur.setX(coinSuperieur.getX() + pas + 1);
+            coinInferieur.setX(coinSuperieur.getX() + PAS);
+
+            for (int jcpt = 0; jcpt < actuelle.getNombreSemaineScolaire() - 1; jcpt++) {
+                if (!actuelle.isVacance()) {
+
+                    plageUtile.ecrireNombre(coinSuperieur, coinInferieur, maMaquette.getMaxSemaine(), new StyleCellule());
+
+                }
+                coinSuperieur.setX(coinInferieur.getX() + 2);
+                coinInferieur.setX(coinSuperieur.getX() + PAS);
+            }
+
         }
     }
 
@@ -116,56 +148,60 @@ public class MaquetteEcriture {
     }
 
     private void ecrireDates() {
-        CoordonneesCelulle curseurNumero = new CoordonneesCelulle("C", 13);
-        CoordonneesCelulle curseurDate = new CoordonneesCelulle("C", 14);
+        CoordonneesCelulle coinSuperieurNumero = new CoordonneesCelulle("J", 13);
+        CoordonneesCelulle coinInferieurNumero = new CoordonneesCelulle(coinSuperieurNumero.getX() + PAS, coinSuperieurNumero.getY() + 1);
+
+        CoordonneesCelulle coinSuperieurDate = new CoordonneesCelulle("J", 14);
+        CoordonneesCelulle coinInferieurDate = new CoordonneesCelulle(coinSuperieurDate.getX() + PAS, coinSuperieurDate.getY() + 1);
 
         StyleCellule styleNumero = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_GRIS_CLAIR, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
         StyleCellule styleDate = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_GRIS_FONCE, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
         StyleCellule vacance = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_ROUGE, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
 
-        celluleUtile.ecrireChaine(curseurNumero, "Numero semaine", styleNumero);
-        celluleUtile.ecrireChaine(curseurDate, "Date semaine", styleDate);
-
-        curseurNumero = new CoordonneesCelulle("J", 13);
-        curseurDate = new CoordonneesCelulle("J", 14);
+        celluleUtile.ecrireChaine(new CoordonneesCelulle("C", 13), "Numero semaine", styleNumero);
+        celluleUtile.ecrireChaine(new CoordonneesCelulle("C", 14), "Date semaine", styleDate);
 
         ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeList();
 
 
         for (int icpt = 0; icpt < maListe.size(); icpt++) {
-
             Periode actuelle = maListe.get(icpt);
-            String formuleNumeroSemaine = "WEEKNUM(" + curseurDate.getxEnChaine() + "" + (curseurDate.getY() + 1) + ")";
-
+            String formuleNumeroSemaine = "WEEKNUM(" + coinSuperieurDate.getxEnChaine() + "" + (coinSuperieurDate.getY() + 1) + ")";
 
             if (actuelle.isVacance()) {
-                celluleUtile.ecrireFormuleDonnantNombre(curseurNumero, formuleNumeroSemaine, vacance);
-                celluleUtile.ecrireChaine(curseurDate, actuelle.getDebutenChaine(), vacance);
+                plageUtile.ecrireFormuleDonnantNombre(coinSuperieurNumero, coinInferieurNumero, formuleNumeroSemaine, vacance);
+                plageUtile.ecrireChaine(coinSuperieurDate, coinInferieurDate, actuelle.getDebutenChaine(), vacance);
             } else {
-                celluleUtile.ecrireFormuleDonnantNombre(curseurNumero, formuleNumeroSemaine, styleNumero);
-                celluleUtile.ecrireChaine(curseurDate, actuelle.getDebutenChaine(), styleDate);
+                plageUtile.ecrireFormuleDonnantNombre(coinSuperieurNumero, coinInferieurNumero, formuleNumeroSemaine, styleNumero);
+                plageUtile.ecrireChaine(coinSuperieurDate, coinInferieurDate, actuelle.getDebutenChaine(), styleDate);
             }
-            curseurNumero = new CoordonneesCelulle(curseurNumero.getX() + 2, curseurNumero.getY() + 1);
-            curseurDate = new CoordonneesCelulle(curseurDate.getX() + 2, curseurDate.getY() + 1);
+            coinSuperieurNumero = new CoordonneesCelulle(coinSuperieurNumero.getX() + PAS + 1, coinSuperieurNumero.getY() + 1);
+            coinInferieurNumero = new CoordonneesCelulle(coinInferieurNumero.getX() + PAS + 1, coinInferieurNumero.getY() + 1);
+
+            coinSuperieurDate = new CoordonneesCelulle(coinSuperieurDate.getX() + PAS + 1, coinSuperieurDate.getY() + 1);
+            coinInferieurDate = new CoordonneesCelulle(coinInferieurDate.getX() + PAS + 1, coinInferieurDate.getY() + 1);
 
 
             for (int jcpt = 0; jcpt < actuelle.getNombreSemaineScolaire() - 1; jcpt++) {
-
-                CoordonneesCelulle temporaire = new CoordonneesCelulle(curseurDate.getX(), curseurDate.getY() + 1);
+                CoordonneesCelulle temporaire = new CoordonneesCelulle(coinSuperieurDate.getX(), coinSuperieurDate.getY() + 1);
                 String formuleDate = temporaire.getxEnChaine() + "" + (temporaire.getY() + 1) + "+7";
-                formuleNumeroSemaine = "WEEKNUM(" + curseurDate.getxEnChaine() + "" + (curseurDate.getY() + 1) + ")";
+                formuleNumeroSemaine = "WEEKNUM(" + coinSuperieurDate.getxEnChaine() + "" + (coinSuperieurDate.getY() + 1) + ")";
 
 
                 if (actuelle.isVacance()) {
-                    celluleUtile.ecrireFormuleDonnantNombre(curseurNumero, formuleNumeroSemaine, vacance);
-                    celluleUtile.ecrireFormuleDonnantDate(curseurDate, formuleDate, vacance);
+                    plageUtile.ecrireFormuleDonnantNombre(coinSuperieurNumero, coinInferieurNumero, formuleNumeroSemaine, vacance);
+                    plageUtile.ecrireFormuleDonnantDate(coinSuperieurDate, coinInferieurDate, formuleDate, vacance);
                 } else {
-                    celluleUtile.ecrireFormuleDonnantNombre(curseurNumero, formuleNumeroSemaine, styleNumero);
-                    celluleUtile.ecrireFormuleDonnantDate(curseurDate, formuleDate, styleDate);
+                    plageUtile.ecrireFormuleDonnantNombre(coinSuperieurNumero, coinInferieurNumero, formuleNumeroSemaine, styleNumero);
+                    plageUtile.ecrireFormuleDonnantDate(coinSuperieurDate, coinInferieurDate, formuleDate, styleDate);
                 }
 
-                curseurNumero = new CoordonneesCelulle(curseurNumero.getX() + 2, curseurNumero.getY() + 1);
-                curseurDate = new CoordonneesCelulle(curseurDate.getX() + 2, curseurDate.getY() + 1);
+                coinSuperieurNumero = new CoordonneesCelulle(coinSuperieurNumero.getX() + PAS + 1, coinSuperieurNumero.getY() + 1);
+                coinInferieurNumero = new CoordonneesCelulle(coinInferieurNumero.getX() + PAS + 1, coinInferieurNumero.getY() + 1);
+
+                coinSuperieurDate = new CoordonneesCelulle(coinSuperieurDate.getX() + PAS + 1, coinSuperieurDate.getY() + 1);
+                coinInferieurDate = new CoordonneesCelulle(coinInferieurDate.getX() + PAS + 1, coinInferieurDate.getY() + 1);
+
 
             }
         }
@@ -358,7 +394,7 @@ public class MaquetteEcriture {
             ecrireInfoUpdate();
             ecrireDisponibiliteEtudiant();
             ecrireCreneauDisponible();
-            ecrireCreneauUtilise();
+            //   ecrireCreneauUtilise();
             ecrireSynthese();
             ecrireDates();
             ecrireCartoucheModule();

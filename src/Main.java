@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Maquette maMaquette = new Maquette("DI3S5", 5, 4, 2, 2, 2);
+        Maquette maMaquette = new Maquette("DI3S5", 4.5, 4, 2, 2, 2);
 
         Temporalite maTempo=new Temporalite();
         maTempo.ajouterPeriode(new GregorianCalendar(2015, 8, 7).getTime(),new GregorianCalendar(2015, 9, 25).getTime());
