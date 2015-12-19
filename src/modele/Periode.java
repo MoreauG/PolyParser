@@ -1,13 +1,10 @@
 package modele;
 
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.joda.time.Weeks;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 
 public class Periode {
