@@ -3,7 +3,7 @@ package utilitaire;
 /**
  * Classe permettant de definir un carre a l'aide de 4 coordonnes
  */
-public class MatriceRendu {
+public class CarreCoordoonees {
     private CoordonneesCelulle coinHautGauche;
     private CoordonneesCelulle coinHautDroit;
     private CoordonneesCelulle coinBasGauche;
@@ -18,7 +18,7 @@ public class MatriceRendu {
      * @param coinBasDroit,   le coin inferieur droit
      * @throws IllegalArgumentException si les coordonnes donnees sont incoherentes
      */
-    public MatriceRendu(CoordonneesCelulle coinHautGauche, CoordonneesCelulle coinHautDroit, CoordonneesCelulle coinBasGauche, CoordonneesCelulle coinBasDroit) throws IllegalArgumentException {
+    public CarreCoordoonees(CoordonneesCelulle coinHautGauche, CoordonneesCelulle coinHautDroit, CoordonneesCelulle coinBasGauche, CoordonneesCelulle coinBasDroit) throws IllegalArgumentException {
 
         if (coinHautGauche.getY() + 1 != coinHautDroit.getY() + 1) {
             throw new IllegalArgumentException("erreur: les ordonnes des coins superieurs ne correspondent pas");
@@ -68,7 +68,7 @@ public class MatriceRendu {
     /**
      * Constructeur par defaut, sans action
      */
-    public MatriceRendu() {
+    public CarreCoordoonees() {
 
     }
 

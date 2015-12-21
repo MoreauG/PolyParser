@@ -26,7 +26,7 @@ public class MaquetteEcriture {
     private EcritureCellule celluleUtile;
     private EcriturePlageCellule plageUtile;
     private static int PAS = 3;
-    private MatriceRendu maMatrice = new MatriceRendu();
+    private CarreCoordoonees maMatrice = new CarreCoordoonees();
 
     public MaquetteEcriture(Maquette maMaquette) {
         this.maMaquette = maMaquette;
