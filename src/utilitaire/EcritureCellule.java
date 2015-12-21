@@ -3,22 +3,22 @@ package utilitaire;
 import org.apache.poi.ss.usermodel.*;
 
 /**
- * Classe repr�sentant un utilitaire facilitant la gestion de l'ecriture d'une cellule au sein d'un fichier excel
+ * Classe representant un utilitaire facilitant la gestion de l'ecriture d'une cellule au sein d'un fichier excel
  */
 public class EcritureCellule {
-    Workbook monFichierExcel;
-    Sheet maFeuille;
-    Row maColonne;
+    Workbook fichierExcel;
+    Sheet feuilleCalcul;
+    Row colonne;
 
     /**
      * Constructeur permettant la creation de l'utilitaire de gestion d'ecriture de Cellule
      *
-     * @param monFichierExcel, Le fichier Excel sur lequel on va travailler
-     * @param maFeuille,       La feuille utilisee au sein du fichier excel
+     * @param fichierExcel, Le fichier Excel sur lequel on va travailler
+     * @param feuilleCalcul,       La feuille utilisee au sein du fichier excel
      */
-    public EcritureCellule(Workbook monFichierExcel, Sheet maFeuille) {
-        this.monFichierExcel = monFichierExcel;
-        this.maFeuille = maFeuille;
+    public EcritureCellule(Workbook fichierExcel, Sheet feuilleCalcul) {
+        this.fichierExcel = fichierExcel;
+        this.feuilleCalcul = feuilleCalcul;
     }
 
     /**
@@ -30,7 +30,7 @@ public class EcritureCellule {
      */
     public void ecrireChaine(CoordonneesCelulle mesCoordonnees, String monContenu, StyleCellule monStyle) {
         gestionColonne(mesCoordonnees);
-        Cell maCellule = maColonne.createCell(mesCoordonnees.getX());
+        Cell maCellule = colonne.createCell(mesCoordonnees.getX());
         maCellule.setCellType(Cell.CELL_TYPE_STRING);
         maCellule.setCellValue(monContenu);
         applicationStyle(monStyle, maCellule);
@@ -45,7 +45,7 @@ public class EcritureCellule {
      */
     public void ecrireNombre(CoordonneesCelulle mesCoordonnees, double monContenu, StyleCellule monStyle) {
         gestionColonne(mesCoordonnees);
-        Cell maCellule = maColonne.createCell(mesCoordonnees.getX());
+        Cell maCellule = colonne.createCell(mesCoordonnees.getX());
         maCellule.setCellType(Cell.CELL_TYPE_NUMERIC);
         maCellule.setCellValue(monContenu);
         applicationStyle(monStyle, maCellule);
@@ -62,7 +62,7 @@ public class EcritureCellule {
     public void ecrireFormuleDonnantNombre(CoordonneesCelulle mesCoordonnees, String maFormule, StyleCellule monStyle) {
 
         gestionColonne(mesCoordonnees);
-        Cell maCellule = maColonne.createCell(mesCoordonnees.getX());
+        Cell maCellule = colonne.createCell(mesCoordonnees.getX());
         maCellule.setCellType(Cell.CELL_TYPE_FORMULA);
         maCellule.setCellFormula(maFormule);
         applicationStyle(monStyle, maCellule);
@@ -79,11 +79,11 @@ public class EcritureCellule {
     public void ecrireFormuleDonnantDate(CoordonneesCelulle mesCoordonnees, String maFormule, StyleCellule monStyle) {
 
         gestionColonne(mesCoordonnees);
-        Cell maCellule = maColonne.createCell(mesCoordonnees.getX());
+        Cell maCellule = colonne.createCell(mesCoordonnees.getX());
         maCellule.setCellType(Cell.CELL_TYPE_NUMERIC);
         applicationStyle(monStyle, maCellule);
         CellStyle monStyleDeCellule = maCellule.getCellStyle();
-        monStyleDeCellule.setDataFormat(monFichierExcel.getCreationHelper().createDataFormat().getFormat("d/m/yy"));
+        monStyleDeCellule.setDataFormat(fichierExcel.getCreationHelper().createDataFormat().getFormat("d/m/yy"));
         maCellule.setCellFormula(maFormule);
     }
 
@@ -93,23 +93,23 @@ public class EcritureCellule {
      * @param mesCoordonnees, les coordoonees a tester
      */
     private void gestionColonne(CoordonneesCelulle mesCoordonnees) {
-        if (maFeuille.getRow(mesCoordonnees.getY()) != null) {
-            maColonne = maFeuille.getRow(mesCoordonnees.getY());
+        if (feuilleCalcul.getRow(mesCoordonnees.getY()) != null) {
+            colonne = feuilleCalcul.getRow(mesCoordonnees.getY());
         } else {
-            maColonne = maFeuille.createRow(mesCoordonnees.getY());
+            colonne = feuilleCalcul.createRow(mesCoordonnees.getY());
         }
     }
 
     /**
-     * fonction permettant l'application d'un style de cellule � une cellule donn�e
+     * fonction permettant l'application d'un style de cellule e une cellule donnee
      *
      * @param monStyle,  style de la cellule
-     * @param maCellule, la cellule sur laquelle sera appliqu�e le style
+     * @param maCellule, la cellule sur laquelle sera appliquee le style
      */
     private void applicationStyle(StyleCellule monStyle, Cell maCellule) {
 
-        CellStyle monStyleDeCellule = monFichierExcel.createCellStyle();
-        Font maPolice = monFichierExcel.createFont();
+        CellStyle monStyleDeCellule = fichierExcel.createCellStyle();
+        Font maPolice = fichierExcel.createFont();
         monStyleDeCellule.setFont(maPolice);
         monStyleDeCellule.setWrapText(true);
         applicationBordure(monStyle, maCellule, monStyleDeCellule);
@@ -124,11 +124,11 @@ public class EcritureCellule {
     }
 
     /**
-     * fonction permettant l'application d'un type de bordure � une cellule
+     * fonction permettant l'application d'un type de bordure e une cellule
      *
      * @param monStyle,          style de la cellule
-     * @param maCellule,         la cellule sur laquelle sera appliqu�e le style
-     * @param monStyleDeCellule, Style de cellule en cours d'�criture
+     * @param maCellule,         la cellule sur laquelle sera appliquee le style
+     * @param monStyleDeCellule, Style de cellule en cours d'ecriture
      */
     private void applicationBordure(StyleCellule monStyle, Cell maCellule, CellStyle monStyleDeCellule) {
         switch (monStyle.getBordure()) {
@@ -153,11 +153,11 @@ public class EcritureCellule {
     }
 
     /**
-     * fonction permettant l'application d'une couleur de fond � une cellule
+     * fonction permettant l'application d'une couleur de fond e une cellule
      *
      * @param monStyle,          style de la cellule
-     * @param maCellule,         la cellule sur laquelle sera appliqu�e le style
-     * @param monStyleDeCellule, Style de cellule en cours d'�criture
+     * @param maCellule,         la cellule sur laquelle sera appliquee le style
+     * @param monStyleDeCellule, Style de cellule en cours d'ecriture
      */
     private void applicationFond(StyleCellule monStyle, Cell maCellule, CellStyle monStyleDeCellule) {
         switch (monStyle.getFond()) {
@@ -215,9 +215,9 @@ public class EcritureCellule {
      * fonction permettant l'application d'un type de police: gras, normal, italique...
      *
      * @param monStyle,          style de la cellule
-     * @param maCellule,         la cellule sur laquelle sera appliqu�e le style
-     * @param monStyleDeCellule, Style de cellule en cours d'�criture
-     * @param maPolice,          police en cours d'�criture
+     * @param maCellule,         la cellule sur laquelle sera appliquee le style
+     * @param monStyleDeCellule, Style de cellule en cours d'ecriture
+     * @param maPolice,          police en cours d'ecriture
      */
     private void applicationGras(StyleCellule monStyle, Cell maCellule, CellStyle monStyleDeCellule, Font maPolice) {
 
@@ -232,16 +232,16 @@ public class EcritureCellule {
     }
 
     /**
-     * fonction permettant l'application d'une couleur � une police
+     * fonction permettant l'application d'une couleur a une police
      *
      * @param monStyle,          style de la cellule
-     * @param maCellule,         la cellule sur laquelle sera appliqu�e le style
-     * @param monStyleDeCellule, Style de cellule en cours d'�criture
-     * @param maPolice,          police en cours d'�criture
+     * @param maCellule,         la cellule sur laquelle sera appliquee le style
+     * @param monStyleDeCellule, Style de cellule en cours d'ecriture
+     * @param maPolice,          police en cours d'ecriture
      */
     private void applicationCouleurEcriture(StyleCellule monStyle, Cell maCellule, CellStyle monStyleDeCellule, Font maPolice) {
 
-        switch (monStyle.getEcriture()) {
+        switch (monStyle.getCouleurPolice()) {
             case StyleCellule.POLICE_NOIRE:
                 break;
 

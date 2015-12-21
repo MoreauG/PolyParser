@@ -47,13 +47,13 @@ public class MaquetteEcriture {
         StyleCellule monStyle = new StyleCellule(StyleCellule.BORDURE_SANS, StyleCellule.FOND_SANS, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
 
         //Ecriture de l'annee
-     /*   if (maMaquette.getMaDateDeDebut().getYear() != maMaquette.getMaDateDeFin().getYear()) // je suis au 1er semestre
+        if (maMaquette.getPlanning().getAnneeDebut() != maMaquette.getPlanning().getAnneeFin()) // je suis au 1er semestre
         {
-            celluleUtile.ecrireChaine(mesCoordonnesEntete, (maMaquette.getMaDateDeDebut().getYear()) + "-" + (maMaquette.getMaDateDeDebut().getYear() + 1), monStyle);
+            celluleUtile.ecrireChaine(mesCoordonnesEntete, maMaquette.getPlanning().getAnneeDebut() + "-" + (maMaquette.getPlanning().getAnneeDebut()+1), monStyle);
         } else {
-            celluleUtile.ecrireChaine(mesCoordonnesEntete, (maMaquette.getMaDateDeDebut().getYear() - 1) + "-" + (maMaquette.getMaDateDeDebut().getYear()), monStyle);
+            celluleUtile.ecrireChaine(mesCoordonnesEntete, (maMaquette.getPlanning().getAnneeDebut() - 1) + "-" + maMaquette.getPlanning().getAnneeDebut(), monStyle);
         }
-*/
+
         //Ecriture de la date d'Update
         mesCoordonnesEntete.setY(5);
         DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.getDefault()).withZone(ZoneId.systemDefault());
@@ -332,7 +332,7 @@ public class MaquetteEcriture {
 
         coinSuperieur = new CoordonneesCelulle("G", 16);
         coinInferieur = new CoordonneesCelulle("G", 17);
-        monStyle.setEcriture(StyleCellule.POLICE_ROUGE);
+        monStyle.setCouleurPolice(StyleCellule.POLICE_ROUGE);
         plageUtile.ecrireChaine(coinSuperieur, coinInferieur, "Heures placees", monStyle);
 
     }
@@ -538,9 +538,180 @@ public class MaquetteEcriture {
         maMatrice.setCoinBasGauche(new CoordonneesCelulle("J", volumeCurseur.getY() - 1));
     }
 
+    private void ecrireMatrice() {
+        StyleCellule cm_Style = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_BLEU, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+        StyleCellule td_Style = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_VERT, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+        StyleCellule tp_Style = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_JAUNE, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+        StyleCellule vacance_style = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_ROUGE, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+        StyleCellule defaut_style = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_SANS, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+
+        CoordonneesCelulle curseur = maMatrice.getCoinHautGauche();
+
+        for (int icpt = 0; icpt < maMaquette.getListeUniteEnseignement().size(); icpt++) {
+            UniteEnseignement monUE = maMaquette.getListeUniteEnseignement().get(icpt);
+
+            for (int jcpt = 0; jcpt < monUE.getEnseignementList().size(); jcpt++) {
+                Enseignement monEnseignement = monUE.getEnseignementList().get(jcpt);
+
+                for (int kcpt = 0; kcpt < monEnseignement.getReparitionProfesseur().size(); kcpt++) {
+                    Professeur monProfesseur = monEnseignement.getReparitionProfesseur().get(kcpt);
+                    VolumeHorraire maRepartition = monProfesseur.getMaRepartition();
+
+                    int typeCours = 0;
+                    if (maRepartition.cmPresent()) {
+                        ecrireLigneMatrice(curseur, typeCours);
+                        curseur.setY(curseur.getY() + 2);
+                    }
+                    if (maRepartition.tdPresent()) {
+                        ecrireLigneMatrice(curseur, typeCours + 1);
+                        curseur.setY(curseur.getY() + 2);
+                    }
+                    if (maRepartition.tpPresent()) {
+                        ecrireLigneMatrice(curseur, typeCours + 2);
+                        curseur.setY(curseur.getY() + 2);
+                    }
+                    if (maRepartition.etPresent()) {
+                        ecrireLigneMatrice(curseur, typeCours + 3);
+                        curseur.setY(curseur.getY() + 2);
+                    }
+                    if (maRepartition.ccPresent()) {
+                        ecrireLigneMatrice(curseur, typeCours + 3);
+                        curseur.setY(curseur.getY() + 2);
+                    }
+
+                }
+
+            }
+            curseur.setY(curseur.getY() + 2);
+
+
+        }
+    }
+
+    private void ecrireLigneMatrice(CoordonneesCelulle refLigne, int typeDeCours) {
+
+        final int cm = 0;
+        final int td = cm + 1;
+        final int tp = td + 1;
+        StyleCellule styleRef;
+        StyleCellule vacance = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_ROUGE, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+
+
+        CoordonneesCelulle curseur = new CoordonneesCelulle(refLigne.getX() + 1, refLigne.getY() + 1);
+
+        switch (typeDeCours) {
+            case cm:
+                styleRef = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_BLEU, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+                break;
+            case td:
+                styleRef = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_VERT, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+                break;
+            case tp:
+                styleRef = new StyleCellule(StyleCellule.BORDURE_SIMPLE, StyleCellule.FOND_JAUNE, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
+                break;
+            default:
+                styleRef = new StyleCellule();
+        }
+
+
+        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeList();
+
+        for (int icpt = 0; icpt < maListe.size(); icpt++) {
+            Periode actuelle = maListe.get(icpt);
+
+            if (!actuelle.isVacance()) {
+                switch (typeDeCours) {
+                    case cm:
+                        celluleUtile.ecrireChaine(curseur, "", styleRef);
+                        curseur.setX(curseur.getX() + 2);
+                        celluleUtile.ecrireChaine(curseur, "", new StyleCellule());
+                        curseur.setX(curseur.getX() + 2);
+                        celluleUtile.ecrireChaine(curseur, "", new StyleCellule());
+                        break;
+                    case td:
+                        celluleUtile.ecrireChaine(curseur, "", new StyleCellule());
+                        curseur.setX(curseur.getX() + 2);
+                        celluleUtile.ecrireChaine(curseur, "", styleRef);
+                        curseur.setX(curseur.getX() + 2);
+                        celluleUtile.ecrireChaine(curseur, "", new StyleCellule());
+                        break;
+                    case tp:
+                        celluleUtile.ecrireChaine(curseur, "", new StyleCellule());
+                        curseur.setX(curseur.getX() + 2);
+                        celluleUtile.ecrireChaine(curseur, "", new StyleCellule());
+                        curseur.setX(curseur.getX() + 2);
+                        celluleUtile.ecrireChaine(curseur, "", styleRef);
+                        break;
+                    default:
+                        celluleUtile.ecrireChaine(curseur, "", styleRef);
+                        curseur.setX(curseur.getX() + 2);
+                        celluleUtile.ecrireChaine(curseur, "", styleRef);
+                        curseur.setX(curseur.getX() + 2);
+                        celluleUtile.ecrireChaine(curseur, "", styleRef);
+                }
+                curseur.setX(curseur.getX() + 2);
+            } else {
+                celluleUtile.ecrireChaine(curseur, "", vacance);
+                curseur.setX(curseur.getX() + 2);
+                celluleUtile.ecrireChaine(curseur, "", vacance);
+                curseur.setX(curseur.getX() + 2);
+                celluleUtile.ecrireChaine(curseur, "", vacance);
+                curseur.setX(curseur.getX() + 2);
+            }
+
+            // curseur.setX(curseur.getX() + 2);
+
+            for (int jcpt = 0; jcpt < actuelle.getNombreSemaineScolaire() - 1; jcpt++) {
+
+                if (!actuelle.isVacance()) {
+                    switch (typeDeCours) {
+                        case cm:
+                            celluleUtile.ecrireChaine(curseur, "", styleRef);
+                            curseur.setX(curseur.getX() + 2);
+                            celluleUtile.ecrireChaine(curseur, "", new StyleCellule());
+                            curseur.setX(curseur.getX() + 2);
+                            celluleUtile.ecrireChaine(curseur, "", new StyleCellule());
+                            break;
+                        case td:
+                            celluleUtile.ecrireChaine(curseur, "", new StyleCellule());
+                            curseur.setX(curseur.getX() + 2);
+                            celluleUtile.ecrireChaine(curseur, "", styleRef);
+                            curseur.setX(curseur.getX() + 2);
+                            celluleUtile.ecrireChaine(curseur, "", new StyleCellule());
+                            break;
+                        case tp:
+                            celluleUtile.ecrireChaine(curseur, "", new StyleCellule());
+                            curseur.setX(curseur.getX() + 2);
+                            celluleUtile.ecrireChaine(curseur, "", new StyleCellule());
+                            curseur.setX(curseur.getX() + 2);
+                            celluleUtile.ecrireChaine(curseur, "", styleRef);
+                            break;
+                        default:
+                            celluleUtile.ecrireChaine(curseur, "", new StyleCellule());
+                            curseur.setX(curseur.getX() + 2);
+                            celluleUtile.ecrireChaine(curseur, "", new StyleCellule());
+                            curseur.setX(curseur.getX() + 2);
+                            celluleUtile.ecrireChaine(curseur, "", new StyleCellule());
+                    }
+                } else {
+                    celluleUtile.ecrireChaine(curseur, "", vacance);
+                    curseur.setX(curseur.getX() + 2);
+                    celluleUtile.ecrireChaine(curseur, "", vacance);
+                    curseur.setX(curseur.getX() + 2);
+                    celluleUtile.ecrireChaine(curseur, "", vacance);
+                }
+
+                curseur.setX(curseur.getX() + 2);
+            }
+
+
+        }
+    }
+
     /**
      * fonction permettant l'ecriture d'une maquette complete
      */
+
     public void ecrireMaquette() {
         try {
 
@@ -558,7 +729,7 @@ public class MaquetteEcriture {
             ecrireCartoucheRepartition();
             ecrireModule();
             ecrireSynthese();
-            //ecrire Matrice
+            ecrireMatrice();
 
             maMatrice.setCoinBasDroit(new CoordonneesCelulle(maMatrice.getCoinHautDroit().getX() + 1, maMatrice.getCoinBasGauche().getY() + 1));
             finalise();
@@ -571,7 +742,7 @@ public class MaquetteEcriture {
     }
 
     private void finalise() {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < maMatrice.getCoinHautDroit().getX()+1; i++) {
             maFeuille.autoSizeColumn(i, true);
         }
     }

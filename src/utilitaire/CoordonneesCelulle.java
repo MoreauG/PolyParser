@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Classe repr�sentant un jeu de coordonee au sein d'une feuille de calcul
+ * Classe representant un jeu de coordonee au sein d'une feuille de calcul
  */
 public class CoordonneesCelulle {
     int x;

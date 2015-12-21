@@ -29,4 +29,12 @@ public class Temporalite {
         }
         return total;
     }
+
+    public int getAnneeDebut() {
+        return enseignementList.get(0).getDebut().year().get();
+    }
+
+    public int getAnneeFin() {
+        return enseignementList.get(enseignementList.size() - 1).getDebut().year().get();
+    }
 }

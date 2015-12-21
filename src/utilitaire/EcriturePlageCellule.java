@@ -8,7 +8,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
 
 /**
- * Created by germa on 30/10/2015.
+ * Classe representant un utilitaire facilitant la gestion de l'ecriture d'une plage de cellules au sein d'un fichier excel
  */
 public class EcriturePlageCellule {
     Workbook monFichierExcel;

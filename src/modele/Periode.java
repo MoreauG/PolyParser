@@ -10,6 +10,7 @@ import java.util.Date;
 public class Periode {
 
     boolean vacance;
+
     DateTime debut; //lundi debut
     DateTime fin; //vendredi fin
 
@@ -39,6 +40,14 @@ public class Periode {
 
     public int getNumeroSemaineFin() {
         return fin.weekOfWeekyear().get();
+    }
+
+    public DateTime getDebut() {
+        return debut;
+    }
+
+    public DateTime getFin() {
+        return fin;
     }
 
 }

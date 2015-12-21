@@ -1,7 +1,7 @@
 package utilitaire;
 
 /**
- * Created by germa on 12/11/2015.
+ * Classe representant un style de cellule (ou de plage de cellules) au sein d'une feuille de calcul
  */
 public class StyleCellule {
     public static final int BORDURE_SANS = 0;
@@ -30,40 +30,98 @@ public class StyleCellule {
     private int bordure;
     private int fond;
     private int gras;
+    private int couleurPolice;
 
-    private int ecriture;
+    /**
+     * Constructeur permettant la creation d'un style de cellule
+     *
+     * @param bordure,       le type de bordure souhaitee
+     * @param fond,          le couleur du fond souhaitee
+     * @param gras,          si l'on ecris en gras ou non
+     * @param couleurPolice, la couleur de la police d'ecriture
+     * @throws IllegalArgumentException, si on essaye de cree notre objet avec un/des parametres non definis
+     */
+    public StyleCellule(int bordure, int fond, int gras, int couleurPolice) throws IllegalArgumentException {
 
-    public StyleCellule(int bordure, int fond, int gras, int ecriture) {
+        if (bordure > BORDURE_DOUBLE || bordure < BORDURE_SANS) {
+            throw new IllegalArgumentException("constante non existante");
+        }
         this.bordure = bordure;
+
+
+        if (fond > FOND_BLEU_GRIS || fond < FOND_SANS) {
+            throw new IllegalArgumentException("constante non existante");
+        }
         this.fond = fond;
+
+
+        if (gras > GRAS_SANS || gras < GRAS_AVEC) {
+            throw new IllegalArgumentException("constante non existante");
+        }
         this.gras = gras;
-        this.ecriture = ecriture;
+
+        if (couleurPolice > POLICE_ROUGE || couleurPolice < POLICE_NOIRE) {
+            throw new IllegalArgumentException("constante non existante");
+        }
+        this.couleurPolice = couleurPolice;
     }
 
+    /**
+     * constructeur par defaut, permet de definir un style de base
+     */
     public StyleCellule() {
         bordure = BORDURE_SIMPLE;
         fond = FOND_SANS;
         gras = GRAS_SANS;
-        ecriture = POLICE_NOIRE;
+        couleurPolice = POLICE_NOIRE;
     }
 
+    /**
+     * fonction retourant le type de bordure du style
+     *
+     * @return bordure, le type de bordure
+     */
     public int getBordure() {
         return bordure;
     }
 
+    /**
+     * fonction retourant le type de fond du style
+     *
+     * @return fond, le type de fond
+     */
     public int getFond() {
         return fond;
     }
 
+    /**
+     * fonction retourant le type de police: gras ou non, du style
+     *
+     * @return gras, le type de police
+     */
     public int getGras() {
         return gras;
     }
 
-    public int getEcriture() {
-        return ecriture;
+    /**
+     * fonction retourant le type de couleur de la police du style
+     *
+     * @return couleurPolice, le type de couleur de la police
+     */
+    public int getCouleurPolice() {
+        return couleurPolice;
     }
 
-    public void setEcriture(int ecriture) {
-        this.ecriture = ecriture;
+    /**
+     * fonction permettant de definir la couleur de la police d'ecriture
+     *
+     * @param couleurPolice, la couleur souhaitee
+     * @throws IllegalArgumentException, si le parametre passe ne correspond pas a une constante definie
+     */
+    public void setCouleurPolice(int couleurPolice) throws IllegalArgumentException {
+        if (couleurPolice > POLICE_ROUGE || couleurPolice < POLICE_NOIRE) {
+            throw new IllegalArgumentException("constante non existante");
+        }
+        this.couleurPolice = couleurPolice;
     }
 }
