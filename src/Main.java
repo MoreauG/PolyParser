@@ -10,17 +10,17 @@ public class Main {
 
         Maquette maMaquette = new Maquette("DI3S5", 4.5, 4, 2, 2, 2);
 
-        Temporalite maTempo=new Temporalite();
-        maTempo.ajouterPeriode(new GregorianCalendar(2015, 8, 7).getTime(),new GregorianCalendar(2015, 9, 25).getTime());
-        maTempo.ajouterPeriode(new GregorianCalendar(2015, 9, 26).getTime(),new GregorianCalendar(2015, 10, 1).getTime());
-        maTempo.ajouterPeriode(new GregorianCalendar(2015, 10, 2).getTime(),new GregorianCalendar(2015, 11, 20).getTime());
-        maTempo.ajouterPeriode(new GregorianCalendar(2015, 11, 21).getTime(),new GregorianCalendar(2016, 0, 3).getTime());
-        maTempo.ajouterPeriode(new GregorianCalendar(2016, 0, 4).getTime(),new GregorianCalendar(2016, 0, 17).getTime());
+        Temporalite maTempo = new Temporalite();
+        maTempo.ajouterPeriode(new GregorianCalendar(2015, 8, 7).getTime(), new GregorianCalendar(2015, 9, 25).getTime());
+        maTempo.ajouterPeriode(new GregorianCalendar(2015, 9, 26).getTime(), new GregorianCalendar(2015, 10, 1).getTime());
+        maTempo.ajouterPeriode(new GregorianCalendar(2015, 10, 2).getTime(), new GregorianCalendar(2015, 11, 20).getTime());
+        maTempo.ajouterPeriode(new GregorianCalendar(2015, 11, 21).getTime(), new GregorianCalendar(2016, 0, 3).getTime());
+        maTempo.ajouterPeriode(new GregorianCalendar(2016, 0, 4).getTime(), new GregorianCalendar(2016, 0, 17).getTime());
         maMaquette.setPlanning(maTempo);
 
 
-        UniteEnseignement Prog = new UniteEnseignement("Prog", 60, 5);
-        UniteEnseignement Math = new UniteEnseignement("Math", 60, 5);
+        UniteEnseignement Prog = new UniteEnseignement("Prog");
+        UniteEnseignement Math = new UniteEnseignement("Math");
 
         Professeur Lente = new Professeur("Christophe Lente", 1, 2, 3, 4, 0);
         Professeur Ahmed = new Professeur("Christophe Ahmed", 8, 8, 8, 8, 0);

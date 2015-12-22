@@ -69,7 +69,7 @@ public class MaquetteEcriture {
 
         celluleUtile.ecrireChaine(new CoordonneesCelulle("C", 5), "Disponibilite / etudiant", new StyleCellule());
 
-        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeList();
+        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeListe();
 
         CoordonneesCelulle coinSuperieur = new CoordonneesCelulle("J", 5);
         CoordonneesCelulle coinInferieur = new CoordonneesCelulle(coinSuperieur.getX() + PAS, coinSuperieur.getY() + 1);
@@ -102,7 +102,7 @@ public class MaquetteEcriture {
 
         celluleUtile.ecrireChaine(new CoordonneesCelulle("C", 6), "Creneaux Disponibles", new StyleCellule());
 
-        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeList();
+        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeListe();
 
         CoordonneesCelulle coinSuperieur = new CoordonneesCelulle("J", 6);
         CoordonneesCelulle coinInferieur = new CoordonneesCelulle(coinSuperieur.getX() + PAS, coinSuperieur.getY() + 1);
@@ -157,7 +157,7 @@ public class MaquetteEcriture {
         coinSuperieurSomme = new CoordonneesCelulle("J", 11);
         coinInferieurSomme = new CoordonneesCelulle(coinSuperieurSomme.getX() + PAS, coinSuperieurSomme.getY() + 1);
 
-        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeList();
+        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeListe();
 
         for (int icpt = 0; icpt < maListe.size(); icpt++) {
 
@@ -257,7 +257,7 @@ public class MaquetteEcriture {
         celluleUtile.ecrireChaine(new CoordonneesCelulle("C", 13), "Numero semaine", styleNumero);
         celluleUtile.ecrireChaine(new CoordonneesCelulle("C", 14), "Date semaine", styleDate);
 
-        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeList();
+        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeListe();
 
 
         for (int icpt = 0; icpt < maListe.size(); icpt++) {
@@ -344,7 +344,7 @@ public class MaquetteEcriture {
         StyleCellule tdStyle = new StyleCellule(StyleCellule.BORDURE_SANS, StyleCellule.FOND_VERT, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
         StyleCellule tpStyle = new StyleCellule(StyleCellule.BORDURE_SANS, StyleCellule.FOND_JAUNE, StyleCellule.GRAS_SANS, StyleCellule.POLICE_NOIRE);
 
-        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeList();
+        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeListe();
 
         for (int icpt = 0; icpt < maListe.size(); icpt++) {
             Periode actuelle = maListe.get(icpt);
@@ -424,7 +424,7 @@ public class MaquetteEcriture {
                     plageUtile.ecrireChaine(intervenantCurseur, temporaire, monProfesseur.getNom(), intervenantStyle);
                     intervenantCurseur = new CoordonneesCelulle("C", intervenantCurseur.getY() + 1 + monProfesseur.getVariete());
 
-                    VolumeHorraire maRepartition = monProfesseur.getMaRepartition();
+                    VolumeHorraire maRepartition = monProfesseur.getRepartition();
 
                     if (maRepartition.cmPresent()) {
                         celluleUtile.ecrireNombre(volumeCurseur, maRepartition.getCmVolume(), volumeStyle);
@@ -489,7 +489,7 @@ public class MaquetteEcriture {
                         celluleUtile.ecrireChaine(temporaire, "", volumeStyle);
 
                         temporaire = new CoordonneesCelulle("E", volumeCurseur.getY() + 1);
-                        celluleUtile.ecrireNombre(temporaire, maRepartition.getCCVolume(), volumeStyle);
+                        celluleUtile.ecrireNombre(temporaire, maRepartition.getCcVolume(), volumeStyle);
 
                         temporaire = new CoordonneesCelulle("F", volumeCurseur.getY() + 1);
                         celluleUtile.ecrireChaine(temporaire, "", styleVide);
@@ -512,7 +512,7 @@ public class MaquetteEcriture {
                         celluleUtile.ecrireChaine(temporaire, "", volumeStyle);
 
                         temporaire = new CoordonneesCelulle("F", volumeCurseur.getY() + 1);
-                        celluleUtile.ecrireNombre(temporaire, maRepartition.getETVolume(), volumeStyle);
+                        celluleUtile.ecrireNombre(temporaire, maRepartition.getEtVolume(), volumeStyle);
 
                         temporaire = new CoordonneesCelulle("H", volumeCurseur.getY() + 1);
                         celluleUtile.ecrireChaine(temporaire, "ET", controle_volumeStyle);
@@ -555,7 +555,7 @@ public class MaquetteEcriture {
 
                 for (int kcpt = 0; kcpt < monEnseignement.getListeProfesseur().size(); kcpt++) {
                     Professeur monProfesseur = monEnseignement.getListeProfesseur().get(kcpt);
-                    VolumeHorraire maRepartition = monProfesseur.getMaRepartition();
+                    VolumeHorraire maRepartition = monProfesseur.getRepartition();
 
                     int typeCours = 0;
                     if (maRepartition.cmPresent()) {
@@ -614,7 +614,7 @@ public class MaquetteEcriture {
         }
 
 
-        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeList();
+        ArrayList<Periode> maListe = maMaquette.getPlanning().getPeriodeListe();
 
         for (int icpt = 0; icpt < maListe.size(); icpt++) {
             Periode actuelle = maListe.get(icpt);

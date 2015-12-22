@@ -1,53 +1,84 @@
 package modele;
 
 /**
- * Created by germa on 16/12/2015.
+ * Classe representant la repartition horraire des enseignements et evaluations delivrees par des professeurs
  */
 public class VolumeHorraire {
 
     private int cmVolume;
     private int tdVolume;
     private int tpVolume;
-    private int CCVolume;
-    private int ETVolume;
+    private int ccVolume;
+    private int etVolume;
 
-
-    public VolumeHorraire(int cmVolume, int tdVolume, int tpVolume, int CCVolume, int ETVolume) {
+    /**
+     * Unique constructeur, permet d'instancier l'objet avec l'ensemble de ses composants
+     *
+     * @param cmVolume, le nombre d'heures de CM
+     * @param tdVolume, le nombre d'heures de TD
+     * @param tpVolume, le nombre d'heures de TP
+     * @param ccVolume, le nombre d'heures de CC
+     * @param etVolume, le nombre d'heures d'ET
+     */
+    public VolumeHorraire(int cmVolume, int tdVolume, int tpVolume, int ccVolume, int etVolume) {
         this.cmVolume = cmVolume;
         this.tdVolume = tdVolume;
         this.tpVolume = tpVolume;
-        this.CCVolume = CCVolume;
-        this.ETVolume = ETVolume;
+        this.ccVolume = ccVolume;
+        this.etVolume = etVolume;
     }
 
-    public VolumeHorraire() {
-        cmVolume = 0;
-        tdVolume = 0;
-        tpVolume = 0;
-        CCVolume = 0;
-        ETVolume = 0;
-    }
-
+    /**
+     * fonction permettant de donner le nombre d'heures de cours
+     *
+     * @return cmVolume, le nombre d'heures de CM
+     */
     public int getCmVolume() {
         return cmVolume;
     }
 
+    /**
+     * fonction permettant de donner le nombre d'heures de cours
+     *
+     * @return tdVolume, le nombre d'heures de TD
+     */
     public int getTdVolume() {
         return tdVolume;
     }
 
+    /**
+     * fonction permettant de donner le nombre d'heures de cours
+     *
+     * @return tpVolume, le nombre d'heures de TP
+     */
     public int getTpVolume() {
         return tpVolume;
     }
 
-    public int getCCVolume() {
-        return CCVolume;
+    /**
+     * fonction permettant de donner le nombre d'heures de controle
+     *
+     * @return ccVolume, le nombre d'heures de CC
+     */
+    public int getCcVolume() {
+        return ccVolume;
     }
 
-    public int getETVolume() {
-        return ETVolume;
+    /**
+     * fonction permettant de donner le nombre d'heures de controle
+     *
+     * @return etVolume, le nombre d'heures d'ET
+     */
+    public int getEtVolume() {
+        return etVolume;
     }
 
+
+    /**
+     * fonction permettant de determiner si le type d'enseignement est present dans la repartition
+     *
+     * @return true, si la repartition contient des heures de CM
+     */
     public boolean cmPresent() {
         if (cmVolume > 0) {
             return true;
@@ -56,6 +87,11 @@ public class VolumeHorraire {
 
     }
 
+    /**
+     * fonction permettant de determiner si le type d'enseignement est present dans la repartition
+     *
+     * @return true, si la repartition contient des heures de TD
+     */
     public boolean tdPresent() {
         if (tdVolume > 0) {
             return true;
@@ -63,6 +99,11 @@ public class VolumeHorraire {
         return false;
     }
 
+    /**
+     * fonction permettant de determiner si le type d'enseignement est present dans la repartition
+     *
+     * @return true, si la repartition contient des heures de TP
+     */
     public boolean tpPresent() {
         if (tpVolume > 0) {
             return true;
@@ -70,20 +111,36 @@ public class VolumeHorraire {
         return false;
     }
 
+    /**
+     * fonction permettant de determiner si le type d'enseignement est present dans la repartition
+     *
+     * @return true, si la repartition contient des heures de CC
+     */
     public boolean ccPresent() {
-        if (CCVolume > 0) {
+        if (ccVolume > 0) {
             return true;
         }
         return false;
     }
 
+    /**
+     * fonction permettant de determiner si le type d'enseignement est present dans la repartition
+     *
+     * @return true, si la repartition contient des heures de ET
+     */
     public boolean etPresent() {
-        if (ETVolume > 0) {
+        if (etVolume > 0) {
             return true;
         }
         return false;
     }
 
+    /**
+     * fonction permettant d'obtenir la "Variete" au sein d'une repartition.
+     * Si la repartition contient des heures de CM, de TP et une ET la fonction retourna 3
+     *
+     * @return Variete, le nombre de constituants non nul
+     */
     public int getVariete() {
         int Variete = 0;
         if (cmVolume > 0) {
@@ -95,10 +152,10 @@ public class VolumeHorraire {
         if (tpVolume > 0) {
             Variete++;
         }
-        if (CCVolume > 0) {
+        if (ccVolume > 0) {
             Variete++;
         }
-        if (ETVolume > 0) {
+        if (etVolume > 0) {
             Variete++;
         }
 

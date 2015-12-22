@@ -3,34 +3,59 @@ package modele;
 import java.util.ArrayList;
 
 /**
- * Created by germa on 16/12/2015.
+ * Classe permettant de definir une Unite d'Enseignement
+ * une UE (ou module) possede:
+ * -un nom
+ * -une liste d'enseignement
  */
 public class UniteEnseignement {
 
     private String nomUnite;
-    private int poidsUnite;
-    private int ects;
     private ArrayList<Enseignement> enseignementList = new ArrayList();
 
-
-    public UniteEnseignement(String nomUnite, int poidsUnite, int ects) {
+    /**
+     * unique Constructeur, permet d'instancier un module a l'aide de son nom
+     *
+     * @param nomUnite, le nom de l'UE
+     */
+    public UniteEnseignement(String nomUnite) {
         this.nomUnite = nomUnite;
-        this.poidsUnite = poidsUnite;
-        this.ects = ects;
+
     }
 
+    /**
+     * Fonction permettant d'obtenir le nom de l'unite d'enseignement
+     *
+     * @return nomUnite, le nom de l'UE
+     */
     public String getNomUnite() {
         return nomUnite;
     }
 
+    /**
+     * fonction permettant d'ajouter un enseignement a l'UE
+     *
+     * @param nouvelEnseignement, l'enseignement a rajouter a notre UE
+     */
+    public void addEnseignement(Enseignement nouvelEnseignement) {
+        enseignementList.add(nouvelEnseignement);
+    }
+
+    /**
+     * fonction permettant d'obtenir la liste des enseignements au sein d'un UE
+     *
+     * @return enseignementList, la liste des matieres de l'UE
+     */
     public ArrayList<Enseignement> getEnseignementList() {
         return enseignementList;
     }
 
-    public void addEnseignement(Enseignement courant) {
-        enseignementList.add(courant);
-    }
-
+    /**
+     * fonction retournant le nombre de types de "cours" donne au sein d'une UE.
+     * s'il y'a 2CC + 2 TP + 3CM, notre fonction retourna 7
+     *
+     * @return total, le nombre de constituants
+     */
     public int getVariete() {
         int total = 0;
         for (int icpt = 0; icpt < enseignementList.size(); icpt++) {
