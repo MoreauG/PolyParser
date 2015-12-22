@@ -1,14 +1,17 @@
 import modele.*;
+import parser.FichierEcriture;
 import parser.MaquetteEcriture;
 
+import java.io.IOException;
 import java.util.GregorianCalendar;
 
 public class Main {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-        Maquette maMaquette = new Maquette("DI3S5", 4.5, 4, 2, 2, 2);
+        Maquette DI3S5 = new Maquette("DI3S5", 4.5, 4, 2, 2, 2);
+        Maquette DI3S6 = new Maquette("DI3S6", 4.5, 4, 2, 2, 2);
 
         Temporalite maTempo = new Temporalite();
         maTempo.ajouterPeriode(new GregorianCalendar(2015, 8, 7).getTime(), new GregorianCalendar(2015, 9, 25).getTime());
@@ -16,7 +19,7 @@ public class Main {
         maTempo.ajouterPeriode(new GregorianCalendar(2015, 10, 2).getTime(), new GregorianCalendar(2015, 11, 20).getTime());
         maTempo.ajouterPeriode(new GregorianCalendar(2015, 11, 21).getTime(), new GregorianCalendar(2016, 0, 3).getTime());
         maTempo.ajouterPeriode(new GregorianCalendar(2016, 0, 4).getTime(), new GregorianCalendar(2016, 0, 17).getTime());
-        maMaquette.setPlanning(maTempo);
+        DI3S5.setPlanning(maTempo);
 
 
         UniteEnseignement Prog = new UniteEnseignement("Prog");
@@ -40,13 +43,23 @@ public class Main {
         Prog.addEnseignement(C);
         Prog.addEnseignement(java);
 
-        maMaquette.addUniteEnseignement(Math);
-        maMaquette.addUniteEnseignement(Prog);
-        maMaquette.addUniteEnseignement(Math);
+        DI3S5.addUniteEnseignement(Math);
+        DI3S5.addUniteEnseignement(Prog);
+        DI3S5.addUniteEnseignement(Math);
 
-        MaquetteEcriture monEcriture = new MaquetteEcriture(maMaquette);
+        DI3S6.setPlanning(maTempo);
+        DI3S6.addUniteEnseignement(Math);
 
-        monEcriture.ecrireMaquette();
+
+        Scolarite maCollectionDeMaquette = new Scolarite();
+
+        maCollectionDeMaquette.ajouterMaquette(DI3S5);
+        maCollectionDeMaquette.ajouterMaquette(DI3S6);
+
+        FichierEcriture monUtilitaire = new FichierEcriture(maCollectionDeMaquette);
+        long start= System.currentTimeMillis();
+        monUtilitaire.ecrireFichier();
+        System.out.println("Temps d'ecriture du fichier: "+(System.currentTimeMillis()-start)/1000+"s");
     }
 
 }

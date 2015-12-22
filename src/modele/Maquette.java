@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 public class Maquette {
 
-    private String nomMaquette;
+    private String nom;
     private double nombreJourDansUneSemaine;
     private int nombreCreneauParJour;
     private int dureCreneau;
@@ -28,15 +28,15 @@ public class Maquette {
     /**
      * Unique constructeur, permet de definir une maquette a l'aide des parametres
      *
-     * @param nomMaquette,              le nom de la maquette
+     * @param nom,              le nom de la maquette
      * @param nombreJourDansUneSemaine, le nombre de jours travailles dans une semaine
      * @param nombreCreneauParJour,     le nombre de creneau disponible dans une journee
      * @param nombreDeGroupeDeTD,       le nombre de groupe de TD pour un semestre
      * @param nombreDeGroupeDeTP,       le nombre de groupe de TP pour un semestre
      * @param dureCreneau,              la duree d'un creneau de cours
      */
-    public Maquette(String nomMaquette, double nombreJourDansUneSemaine, int nombreCreneauParJour, int nombreDeGroupeDeTD, int nombreDeGroupeDeTP, int dureCreneau) {
-        this.nomMaquette = nomMaquette;
+    public Maquette(String nom, double nombreJourDansUneSemaine, int nombreCreneauParJour, int nombreDeGroupeDeTD, int nombreDeGroupeDeTP, int dureCreneau) {
+        this.nom = nom;
         this.nombreJourDansUneSemaine = nombreJourDansUneSemaine;
         this.nombreCreneauParJour = nombreCreneauParJour;
         this.nombreDeGroupeDeTD = nombreDeGroupeDeTD;
@@ -83,10 +83,10 @@ public class Maquette {
     /**
      * Fonction permettant de recuperer le nom d'une maquette
      *
-     * @return nomMaquette, le nom de la maquette
+     * @return nom, le nom de la maquette
      */
-    public String getNomMaquette() {
-        return nomMaquette;
+    public String getNom() {
+        return nom;
     }
 
     /**

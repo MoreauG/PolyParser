@@ -79,5 +79,13 @@ public class Periode {
         return debut;
     }
 
+    /**
+     * fonction permettant d'obtenir la date de Fin d'une periode
+     *
+     * @return debut, la date de fin
+     */
+    public DateTime getFin() {
+        return fin;
+    }
 
 }
