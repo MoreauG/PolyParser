@@ -49,7 +49,7 @@ public class MaquetteEcriture {
         //Ecriture de l'annee
         if (maMaquette.getPlanning().getAnneeDebut() != maMaquette.getPlanning().getAnneeFin()) // je suis au 1er semestre
         {
-            celluleUtile.ecrireChaine(mesCoordonnesEntete, maMaquette.getPlanning().getAnneeDebut() + "-" + (maMaquette.getPlanning().getAnneeDebut()+1), monStyle);
+            celluleUtile.ecrireChaine(mesCoordonnesEntete, maMaquette.getPlanning().getAnneeDebut() + "-" + (maMaquette.getPlanning().getAnneeDebut() + 1), monStyle);
         } else {
             celluleUtile.ecrireChaine(mesCoordonnesEntete, (maMaquette.getPlanning().getAnneeDebut() - 1) + "-" + maMaquette.getPlanning().getAnneeDebut(), monStyle);
         }
@@ -78,7 +78,7 @@ public class MaquetteEcriture {
         for (int icpt = 0; icpt < maListe.size(); icpt++) {
 
             Periode actuelle = maListe.get(icpt);
-            if (!actuelle.isVacance()) {
+            if (!actuelle.getVacance()) {
                 formule = coinSuperieur.getxEnChaine() + (coinSuperieur.getY() + 2) + "*" + 2;
                 plageUtile.ecrireFormuleDonnantNombre(coinSuperieur, coinInferieur, formule, new StyleCellule());
             }
@@ -86,7 +86,7 @@ public class MaquetteEcriture {
             coinInferieur.setX(coinSuperieur.getX() + PAS);
 
             for (int jcpt = 0; jcpt < actuelle.getNombreSemaineScolaire() - 1; jcpt++) {
-                if (!actuelle.isVacance()) {
+                if (!actuelle.getVacance()) {
                     formule = coinSuperieur.getxEnChaine() + (coinSuperieur.getY() + 2) + "*" + 2;
                     plageUtile.ecrireFormuleDonnantNombre(coinSuperieur, coinInferieur, formule, new StyleCellule());
 
@@ -111,17 +111,17 @@ public class MaquetteEcriture {
         for (int icpt = 0; icpt < maListe.size(); icpt++) {
 
             Periode actuelle = maListe.get(icpt);
-            if (!actuelle.isVacance()) {
+            if (!actuelle.getVacance()) {
 
-                plageUtile.ecrireNombre(coinSuperieur, coinInferieur, maMaquette.getMaxSemaine(), new StyleCellule());
+                plageUtile.ecrireNombre(coinSuperieur, coinInferieur, maMaquette.getNombreCreneauDispoSemaine(), new StyleCellule());
             }
             coinSuperieur.setX(coinInferieur.getX() + 2);
             coinInferieur.setX(coinSuperieur.getX() + PAS);
 
             for (int jcpt = 0; jcpt < actuelle.getNombreSemaineScolaire() - 1; jcpt++) {
-                if (!actuelle.isVacance()) {
+                if (!actuelle.getVacance()) {
 
-                    plageUtile.ecrireNombre(coinSuperieur, coinInferieur, maMaquette.getMaxSemaine(), new StyleCellule());
+                    plageUtile.ecrireNombre(coinSuperieur, coinInferieur, maMaquette.getNombreCreneauDispoSemaine(), new StyleCellule());
 
                 }
                 coinSuperieur.setX(coinInferieur.getX() + 2);
@@ -162,7 +162,7 @@ public class MaquetteEcriture {
         for (int icpt = 0; icpt < maListe.size(); icpt++) {
 
             Periode actuelle = maListe.get(icpt);
-            if (!actuelle.isVacance()) {
+            if (!actuelle.getVacance()) {
                 celluleUtile.ecrireChaine(curseurTypeCours, "CM", cmStyle);
                 curseurTypeCours.setX(curseurTypeCours.getX() + 2);
                 celluleUtile.ecrireChaine(curseurTypeCours, "TD", tdStyle);
@@ -200,7 +200,7 @@ public class MaquetteEcriture {
 
 
             for (int jcpt = 0; jcpt < actuelle.getNombreSemaineScolaire() - 1; jcpt++) {
-                if (!actuelle.isVacance()) {
+                if (!actuelle.getVacance()) {
                     sousSommeFormule = "SUM(" + curseurVolumeCours.getxEnChaine() + (curseurVolumeCours.getY() + 1) + ":";
 
                     sommmeColonne = "SUM(" + curseurVolumeCours.getxEnChaine() + (maMatrice.getCoinHautGauche().getY() + 1) + ":" + curseurVolumeCours.getxEnChaine() + (maMatrice.getCoinBasGauche().getY() + 1) + ")";
@@ -264,7 +264,7 @@ public class MaquetteEcriture {
             Periode actuelle = maListe.get(icpt);
             String formuleNumeroSemaine = "WEEKNUM(" + coinSuperieurDate.getxEnChaine() + "" + (coinSuperieurDate.getY() + 1) + ")";
 
-            if (actuelle.isVacance()) {
+            if (actuelle.getVacance()) {
                 plageUtile.ecrireFormuleDonnantNombre(coinSuperieurNumero, coinInferieurNumero, formuleNumeroSemaine, vacance);
                 plageUtile.ecrireChaine(coinSuperieurDate, coinInferieurDate, actuelle.getDebutenChaine(), vacance);
             } else {
@@ -284,7 +284,7 @@ public class MaquetteEcriture {
                 formuleNumeroSemaine = "WEEKNUM(" + coinSuperieurDate.getxEnChaine() + "" + (coinSuperieurDate.getY() + 1) + ")";
 
 
-                if (actuelle.isVacance()) {
+                if (actuelle.getVacance()) {
                     plageUtile.ecrireFormuleDonnantNombre(coinSuperieurNumero, coinInferieurNumero, formuleNumeroSemaine, vacance);
                     plageUtile.ecrireFormuleDonnantDate(coinSuperieurDate, coinInferieurDate, formuleDate, vacance);
                 } else {
@@ -349,7 +349,7 @@ public class MaquetteEcriture {
         for (int icpt = 0; icpt < maListe.size(); icpt++) {
             Periode actuelle = maListe.get(icpt);
 
-            if (!actuelle.isVacance()) {
+            if (!actuelle.getVacance()) {
                 celluleUtile.ecrireChaine(curseur, "CM", cmStyle);
                 curseur = new CoordonneesCelulle(curseur.getX() + 2, curseur.getY() + 1);
                 celluleUtile.ecrireChaine(curseur, "TD", tdStyle);
@@ -362,7 +362,7 @@ public class MaquetteEcriture {
 
             for (int jcpt = 0; jcpt < actuelle.getNombreSemaineScolaire() - 1; jcpt++) {
 
-                if (!actuelle.isVacance()) {
+                if (!actuelle.getVacance()) {
                     celluleUtile.ecrireChaine(curseur, "CM", cmStyle);
                     curseur = new CoordonneesCelulle(curseur.getX() + 2, curseur.getY() + 1);
                     celluleUtile.ecrireChaine(curseur, "TD", tdStyle);
@@ -417,8 +417,8 @@ public class MaquetteEcriture {
                 enseignementCurseur = new CoordonneesCelulle("B", enseignementCurseur.getY() + 1 + monEnseignement.getVariete());
 
 
-                for (int kcpt = 0; kcpt < monEnseignement.getReparitionProfesseur().size(); kcpt++) {
-                    Professeur monProfesseur = monEnseignement.getReparitionProfesseur().get(kcpt);
+                for (int kcpt = 0; kcpt < monEnseignement.getListeProfesseur().size(); kcpt++) {
+                    Professeur monProfesseur = monEnseignement.getListeProfesseur().get(kcpt);
 
                     temporaire = new CoordonneesCelulle("C", intervenantCurseur.getY() + monProfesseur.getVariete());
                     plageUtile.ecrireChaine(intervenantCurseur, temporaire, monProfesseur.getNom(), intervenantStyle);
@@ -553,8 +553,8 @@ public class MaquetteEcriture {
             for (int jcpt = 0; jcpt < monUE.getEnseignementList().size(); jcpt++) {
                 Enseignement monEnseignement = monUE.getEnseignementList().get(jcpt);
 
-                for (int kcpt = 0; kcpt < monEnseignement.getReparitionProfesseur().size(); kcpt++) {
-                    Professeur monProfesseur = monEnseignement.getReparitionProfesseur().get(kcpt);
+                for (int kcpt = 0; kcpt < monEnseignement.getListeProfesseur().size(); kcpt++) {
+                    Professeur monProfesseur = monEnseignement.getListeProfesseur().get(kcpt);
                     VolumeHorraire maRepartition = monProfesseur.getMaRepartition();
 
                     int typeCours = 0;
@@ -619,7 +619,7 @@ public class MaquetteEcriture {
         for (int icpt = 0; icpt < maListe.size(); icpt++) {
             Periode actuelle = maListe.get(icpt);
 
-            if (!actuelle.isVacance()) {
+            if (!actuelle.getVacance()) {
                 switch (typeDeCours) {
                     case cm:
                         celluleUtile.ecrireChaine(curseur, "", styleRef);
@@ -663,7 +663,7 @@ public class MaquetteEcriture {
 
             for (int jcpt = 0; jcpt < actuelle.getNombreSemaineScolaire() - 1; jcpt++) {
 
-                if (!actuelle.isVacance()) {
+                if (!actuelle.getVacance()) {
                     switch (typeDeCours) {
                         case cm:
                             celluleUtile.ecrireChaine(curseur, "", styleRef);
@@ -711,7 +711,6 @@ public class MaquetteEcriture {
     /**
      * fonction permettant l'ecriture d'une maquette complete
      */
-
     public void ecrireMaquette() {
         try {
 
@@ -742,7 +741,7 @@ public class MaquetteEcriture {
     }
 
     private void finalise() {
-        for (int i = 0; i < maMatrice.getCoinHautDroit().getX()+1; i++) {
+        for (int i = 0; i < maMatrice.getCoinHautDroit().getX() + 1; i++) {
             maFeuille.autoSizeColumn(i, true);
         }
     }

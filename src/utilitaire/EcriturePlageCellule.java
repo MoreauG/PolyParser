@@ -11,20 +11,20 @@ import org.apache.poi.ss.util.RegionUtil;
  * Classe representant un utilitaire facilitant la gestion de l'ecriture d'une plage de cellules au sein d'un fichier excel
  */
 public class EcriturePlageCellule {
-    Workbook monFichierExcel;
-    Sheet maFeuille;
-    EcritureCellule monUtilitaireEcriture;
+    Workbook fichierExcel;
+    Sheet feuilleCalcul;
+    EcritureCellule utilitaireCellule;
 
     /**
      * Constructeur permettant la creation de l'utilitaire de gestion d'ecriture de plage de cellules
      *
-     * @param monFichierExcel, Le fichier Excel sur lequel on va travailler
-     * @param maFeuille,       La feuille utilisee au sein du fichier excel
+     * @param fichierExcel, Le fichier Excel sur lequel on va travailler
+     * @param feuilleCalcul,       La feuille utilisee au sein du fichier excel
      */
-    public EcriturePlageCellule(Workbook monFichierExcel, Sheet maFeuille) {
-        this.monFichierExcel = monFichierExcel;
-        this.maFeuille = maFeuille;
-        monUtilitaireEcriture = new EcritureCellule(monFichierExcel, maFeuille);
+    public EcriturePlageCellule(Workbook fichierExcel, Sheet feuilleCalcul) {
+        this.fichierExcel = fichierExcel;
+        this.feuilleCalcul = feuilleCalcul;
+        utilitaireCellule = new EcritureCellule(fichierExcel, feuilleCalcul);
     }
 
     /**
@@ -42,11 +42,11 @@ public class EcriturePlageCellule {
         for (int i = mesCellules.getFirstColumn(); i <= mesCellules.getLastColumn(); i++) {
             for (int j = mesCellules.getFirstRow(); j <= mesCellules.getLastRow(); j++) {
                 CoordonneesCelulle mesCoordonnesTemporaires = new CoordonneesCelulle(i + 1, j + 1);
-                monUtilitaireEcriture.ecrireChaine(mesCoordonnesTemporaires, contenu, monStyle);
+                utilitaireCellule.ecrireChaine(mesCoordonnesTemporaires, contenu, monStyle);
             }
         }
 
-        maFeuille.addMergedRegion(mesCellules);
+        feuilleCalcul.addMergedRegion(mesCellules);
         applicationStyle(monStyle, mesCellules);
     }
 
@@ -65,12 +65,12 @@ public class EcriturePlageCellule {
         for (int i = mesCellules.getFirstColumn(); i <= mesCellules.getLastColumn(); i++) {
             for (int j = mesCellules.getFirstRow(); j <= mesCellules.getLastRow(); j++) {
                 CoordonneesCelulle mesCoordonnesTemporaires = new CoordonneesCelulle(i + 1, j + 1);
-                monUtilitaireEcriture.ecrireNombre(mesCoordonnesTemporaires, contenu, monStyle);
+                utilitaireCellule.ecrireNombre(mesCoordonnesTemporaires, contenu, monStyle);
             }
         }
 
         applicationStyle(monStyle, mesCellules);
-        maFeuille.addMergedRegion(mesCellules);
+        feuilleCalcul.addMergedRegion(mesCellules);
     }
 
     /**
@@ -88,11 +88,11 @@ public class EcriturePlageCellule {
         for (int i = mesCellules.getFirstColumn(); i <= mesCellules.getLastColumn(); i++) {
             for (int j = mesCellules.getFirstRow(); j <= mesCellules.getLastRow(); j++) {
                 CoordonneesCelulle mesCoordonnesTemporaires = new CoordonneesCelulle(i + 1, j + 1);
-                monUtilitaireEcriture.ecrireFormuleDonnantNombre(mesCoordonnesTemporaires, contenu, monStyle);
+                utilitaireCellule.ecrireFormuleDonnantNombre(mesCoordonnesTemporaires, contenu, monStyle);
             }
         }
 
-        maFeuille.addMergedRegion(mesCellules);
+        feuilleCalcul.addMergedRegion(mesCellules);
         applicationStyle(monStyle, mesCellules);
     }
 
@@ -111,11 +111,11 @@ public class EcriturePlageCellule {
         for (int i = mesCellules.getFirstColumn(); i <= mesCellules.getLastColumn(); i++) {
             for (int j = mesCellules.getFirstRow(); j <= mesCellules.getLastRow(); j++) {
                 CoordonneesCelulle mesCoordonnesTemporaires = new CoordonneesCelulle(i + 1, j + 1);
-                monUtilitaireEcriture.ecrireFormuleDonnantDate(mesCoordonnesTemporaires, contenu, monStyle);
+                utilitaireCellule.ecrireFormuleDonnantDate(mesCoordonnesTemporaires, contenu, monStyle);
             }
         }
 
-        maFeuille.addMergedRegion(mesCellules);
+        feuilleCalcul.addMergedRegion(mesCellules);
         applicationStyle(monStyle, mesCellules);
     }
 
@@ -142,17 +142,17 @@ public class EcriturePlageCellule {
                 break;
 
             case StyleCellule.BORDURE_SIMPLE:
-                RegionUtil.setBorderBottom(CellStyle.BORDER_THIN, mesCellules, maFeuille, monFichierExcel);
-                RegionUtil.setBorderTop(CellStyle.BORDER_THIN, mesCellules, maFeuille, monFichierExcel);
-                RegionUtil.setBorderLeft(CellStyle.BORDER_THIN, mesCellules, maFeuille, monFichierExcel);
-                RegionUtil.setBorderRight(CellStyle.BORDER_THIN, mesCellules, maFeuille, monFichierExcel);
+                RegionUtil.setBorderBottom(CellStyle.BORDER_THIN, mesCellules, feuilleCalcul, fichierExcel);
+                RegionUtil.setBorderTop(CellStyle.BORDER_THIN, mesCellules, feuilleCalcul, fichierExcel);
+                RegionUtil.setBorderLeft(CellStyle.BORDER_THIN, mesCellules, feuilleCalcul, fichierExcel);
+                RegionUtil.setBorderRight(CellStyle.BORDER_THIN, mesCellules, feuilleCalcul, fichierExcel);
                 break;
 
             case StyleCellule.BORDURE_DOUBLE:
-                RegionUtil.setBorderBottom(CellStyle.BORDER_DOUBLE, mesCellules, maFeuille, monFichierExcel);
-                RegionUtil.setBorderTop(CellStyle.BORDER_DOUBLE, mesCellules, maFeuille, monFichierExcel);
-                RegionUtil.setBorderLeft(CellStyle.BORDER_DOUBLE, mesCellules, maFeuille, monFichierExcel);
-                RegionUtil.setBorderRight(CellStyle.BORDER_DOUBLE, mesCellules, maFeuille, monFichierExcel);
+                RegionUtil.setBorderBottom(CellStyle.BORDER_DOUBLE, mesCellules, feuilleCalcul, fichierExcel);
+                RegionUtil.setBorderTop(CellStyle.BORDER_DOUBLE, mesCellules, feuilleCalcul, fichierExcel);
+                RegionUtil.setBorderLeft(CellStyle.BORDER_DOUBLE, mesCellules, feuilleCalcul, fichierExcel);
+                RegionUtil.setBorderRight(CellStyle.BORDER_DOUBLE, mesCellules, feuilleCalcul, fichierExcel);
                 break;
         }
     }

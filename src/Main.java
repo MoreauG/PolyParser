@@ -17,8 +17,7 @@ public class Main {
         maTempo.ajouterPeriode(new GregorianCalendar(2015, 11, 21).getTime(),new GregorianCalendar(2016, 0, 3).getTime());
         maTempo.ajouterPeriode(new GregorianCalendar(2016, 0, 4).getTime(),new GregorianCalendar(2016, 0, 17).getTime());
         maMaquette.setPlanning(maTempo);
-        maMaquette.setNombreCreneauParJour(4);
-        maMaquette.setNombreJourDansUneSemaine(4.5);
+
 
         UniteEnseignement Prog = new UniteEnseignement("Prog", 60, 5);
         UniteEnseignement Math = new UniteEnseignement("Math", 60, 5);

@@ -22,26 +22,6 @@ public class Professeur {
         return maRepartition.getVariete();
     }
 
-    public int getCmVolume() {
-        return maRepartition.getCmVolume();
-    }
-
-    public int getTdVolume() {
-        return maRepartition.getTdVolume();
-    }
-
-    public int getTpVolume() {
-        return maRepartition.getTpVolume();
-    }
-
-    public int getCCVolume() {
-        return maRepartition.getCCVolume();
-    }
-
-    public int getgetETVolume() {
-        return maRepartition.getETVolume();
-    }
-
     public VolumeHorraire getMaRepartition() {
         return maRepartition;
     }
