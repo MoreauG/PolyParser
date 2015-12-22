@@ -28,7 +28,7 @@ public class Maquette {
     /**
      * Unique constructeur, permet de definir une maquette a l'aide des parametres
      *
-     * @param nom,              le nom de la maquette
+     * @param nom,                      le nom de la maquette
      * @param nombreJourDansUneSemaine, le nombre de jours travailles dans une semaine
      * @param nombreCreneauParJour,     le nombre de creneau disponible dans une journee
      * @param nombreDeGroupeDeTD,       le nombre de groupe de TD pour un semestre
@@ -96,6 +96,15 @@ public class Maquette {
      */
     public int getNombreCreneauDispoSemaine() {
         return (int) (nombreJourDansUneSemaine * nombreCreneauParJour);
+    }
+
+    /**
+     * Fonction permettant de recuperer la duree d'un creneau
+     *
+     * @return dureCreneau, la duree d'un creneau
+     */
+    public int getDureCreneau() {
+        return dureCreneau;
     }
 
 }

@@ -158,9 +158,49 @@ public class MaquetteEcriture {
      */
     private void ecrireCreneauUtilise() {
 
-        CoordonneesCelulle mesCoordonnes = new CoordonneesCelulle("C", 7);
-        utilitaireCellule.ecrireChaine(mesCoordonnes, "Crenaux Utilises", new StyleCellule());
+        CoordonneesCelulle partieStatique = new CoordonneesCelulle("C", 7);
+        utilitaireCellule.ecrireChaine(partieStatique, "Crenaux Utilises", new StyleCellule());
+        String formule;
 
+        ArrayList<Periode> maListe = maquetteComplete.getPlanning().getPeriodeListe();
+
+        CoordonneesCelulle coinSuperieur = new CoordonneesCelulle("J", 7);
+        CoordonneesCelulle coinInferieur = new CoordonneesCelulle(coinSuperieur.getX() + PAS, coinSuperieur.getY() + 1);
+        CoordonneesCelulle curseurFormule = new CoordonneesCelulle("J", 10);
+
+        for (Periode actuelle : maListe) {
+            if (!actuelle.getVacance()) {
+                formule = "ROUNDUP(" + curseurFormule.getxEnChaine() + "" + (curseurFormule.getY() + 1) + "/" + maquetteComplete.getDureCreneau() + ",0)+";
+                curseurFormule.setX(curseurFormule.getX() + 2);
+                formule += "ROUNDUP(" + curseurFormule.getxEnChaine() + "" + (curseurFormule.getY() + 1) + "/" + maquetteComplete.getDureCreneau() + ",0)+";
+                curseurFormule.setX(curseurFormule.getX() + 2);
+                formule += "ROUNDUP(" + curseurFormule.getxEnChaine() + "" + (curseurFormule.getY() + 1) + "/" + maquetteComplete.getDureCreneau() + ",0)";
+                utilitairePlageCellule.ecrireFormuleDonnantNombre(coinSuperieur, coinInferieur, formule, new StyleCellule());
+                curseurFormule.setX(curseurFormule.getX() + 2);
+            } else {
+                curseurFormule.setX(curseurFormule.getX() + PAS+1);
+            }
+            coinSuperieur.setX(coinInferieur.getX() + 2);
+            coinInferieur.setX(coinSuperieur.getX() + PAS);
+
+            for (int jcpt = 0; jcpt < actuelle.getNombreSemaineScolaire() - 1; jcpt++) {
+                if (!actuelle.getVacance()) {
+                    formule = "ROUNDUP(" + curseurFormule.getxEnChaine() + "" + (curseurFormule.getY() + 1) + "/" + maquetteComplete.getDureCreneau() + ",0)+";
+                    curseurFormule.setX(curseurFormule.getX() + 2);
+                    formule += "ROUNDUP(" + curseurFormule.getxEnChaine() + "" + (curseurFormule.getY() + 1) + "/" + maquetteComplete.getDureCreneau() + ",0)+";
+                    curseurFormule.setX(curseurFormule.getX() + 2);
+                    formule += "ROUNDUP(" + curseurFormule.getxEnChaine() + "" + (curseurFormule.getY() + 1) + "/" + maquetteComplete.getDureCreneau() + ",0)";
+                    curseurFormule.setX(curseurFormule.getX() + 2);
+                    utilitairePlageCellule.ecrireFormuleDonnantNombre(coinSuperieur, coinInferieur, formule, new StyleCellule());
+                } else {
+                    curseurFormule.setX(curseurFormule.getX() + PAS+1);
+                }
+                coinSuperieur.setX(coinInferieur.getX() + 2);
+                coinInferieur.setX(coinSuperieur.getX() + PAS);
+
+            }
+
+        }
     }
 
     /**
