@@ -121,6 +121,7 @@ public class CoordonneesCelulle {
      * Pour A, la fonction retournera 0
      *
      * @param x, la coordonne en abscisse
+     * @return resultat, le nombre converti en tant qu'entier en base 10
      * @throws IndexOutOfBoundsException si la coordonnee n'est pas parsable
      */
     private int ParseX(String x) throws IllegalArgumentException {
@@ -146,6 +147,7 @@ public class CoordonneesCelulle {
      * Pour 0, la fonction retournera A
      *
      * @param x, la coordonne en abscisse
+     * @return chaine, la chaine de caractere correspondant a l'entier donne
      * @throws IndexOutOfBoundsException si la coordonnee n'est pas parsable
      */
     private static String convertX(int x) {
@@ -176,6 +178,6 @@ public class CoordonneesCelulle {
 
     @Override
     public String toString() {
-        return "Valeur: "+"("+x+","+y+") <=> ("+convertX(x)+","+(y+1)+")";
+        return "Valeur: " + "(" + x + "," + y + ") <=> (" + convertX(x) + "," + (y + 1) + ")";
     }
 }

@@ -28,7 +28,7 @@ public class FichierEcriture {
     /**
      * fonction permettant d'ecrire notre fichier de sortie
      *
-     * @throws IOException, si le fichier ne se cree pas correctement
+     * @throws IOException si le fichier ne s'est pas ouvert correctement
      */
     public void ecrireFichier() throws IOException {
 

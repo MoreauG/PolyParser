@@ -39,7 +39,7 @@ public class StyleCellule {
      * @param fond,          le couleur du fond souhaitee
      * @param gras,          si l'on ecris en gras ou non
      * @param couleurPolice, la couleur de la police d'ecriture
-     * @throws IllegalArgumentException, si on essaye de cree notre objet avec un/des parametres non definis
+     * @throws IllegalArgumentException si on essaye de cree notre objet avec un/des parametres non definis
      */
     public StyleCellule(int bordure, int fond, int gras, int couleurPolice) throws IllegalArgumentException {
 
@@ -116,7 +116,7 @@ public class StyleCellule {
      * fonction permettant de definir la couleur de la police d'ecriture
      *
      * @param couleurPolice, la couleur souhaitee
-     * @throws IllegalArgumentException, si le parametre passe ne correspond pas a une constante definie
+     * @throws IllegalArgumentException si le parametre passe ne correspond pas a une constante definie
      */
     public void setCouleurPolice(int couleurPolice) throws IllegalArgumentException {
         if (couleurPolice > POLICE_ROUGE || couleurPolice < POLICE_NOIRE) {

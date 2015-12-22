@@ -36,7 +36,7 @@ public class MaquetteEcriture {
      *
      * @param maquetteComplete, le modele rempli
      * @param fichierExcel,     le fichier au sein duquel notre feuille va etre cree
-     * @throws IllegalArgumentException, si les parametres ne sont pas correctement instancie
+     * @throws IllegalArgumentException si les parametres ne sont pas correctement instancie
      */
     public MaquetteEcriture(Maquette maquetteComplete, Workbook fichierExcel) throws IllegalArgumentException {
 
@@ -770,7 +770,8 @@ public class MaquetteEcriture {
     /**
      * fonction permettant de verifier l'integrite de la maquette
      *
-     * @throws IllegalArgumentException, si un seul des constituants n'est pas correct
+     * @param maquetteComplete, la maquette dont on test l'integrite
+     * @throws IllegalArgumentException si un seul des constituants n'est pas correct
      */
     private void verifierIntegrite(Maquette maquetteComplete) throws IllegalArgumentException {
 
@@ -865,5 +866,5 @@ public class MaquetteEcriture {
 
 
     }
-    
+
 }
