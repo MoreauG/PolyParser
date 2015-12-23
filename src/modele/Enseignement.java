@@ -11,19 +11,19 @@ import java.util.ArrayList;
 public class Enseignement {
 
     private int projetVolume;
-    private String nomEnseignement;
+    private String nom;
     private ArrayList<Professeur> listeProfesseur = new ArrayList();
 
     /**
      * Constructeur unique, permet de definir un enseignement a l'aide de ses constituants
      *
      * @param projetVolume,    temps de projet requis pour l'enseignement
-     * @param nomEnseignement, nom de l'enseignement
+     * @param nom, nom de l'enseignement
      * @param monProfesseur,   un enseignement est construit a l'aide d'un unique professeur, il est possible d'en ajouter d'autre par la suite
      */
-    public Enseignement(int projetVolume, String nomEnseignement, Professeur monProfesseur) {
+    public Enseignement(int projetVolume, String nom, Professeur monProfesseur) {
         this.projetVolume = projetVolume;
-        this.nomEnseignement = nomEnseignement;
+        this.nom = nom;
         listeProfesseur.add(monProfesseur);
     }
 
@@ -48,10 +48,10 @@ public class Enseignement {
     /**
      * fonction permettant de recuperer le nom d'un enseignement
      *
-     * @return nomEnseignement, le nom de l'enseignement
+     * @return nom, le nom de l'enseignement
      */
-    public String getNomEnseignement() {
-        return nomEnseignement;
+    public String getNom() {
+        return nom;
     }
 
     /**

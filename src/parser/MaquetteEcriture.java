@@ -1,7 +1,6 @@
 package parser;
 
 import modele.*;
-import org.apache.commons.lang.ObjectUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import utilitaire.*;
@@ -480,7 +479,7 @@ public class MaquetteEcriture {
             UniteEnseignement monUE = maquetteComplete.getListeUniteEnseignement().get(icpt);
 
             temporaire = new CoordonneesCelulle("A", enseignementCurseur.getY() + monUE.getVariete());
-            utilitairePlageCellule.ecrireChaine(moduleCurseur, temporaire, monUE.getNomUnite(), moduleStyle);
+            utilitairePlageCellule.ecrireChaine(moduleCurseur, temporaire, monUE.getNom(), moduleStyle);
             moduleCurseur = new CoordonneesCelulle("A", moduleCurseur.getY() + 1 + monUE.getVariete());
 
 
@@ -488,7 +487,7 @@ public class MaquetteEcriture {
                 Enseignement monEnseignement = monUE.getEnseignementList().get(jcpt);
 
                 temporaire = new CoordonneesCelulle("B", enseignementCurseur.getY() + monEnseignement.getVariete());
-                utilitairePlageCellule.ecrireChaine(enseignementCurseur, temporaire, monEnseignement.getNomEnseignement(), enseignementStyle);
+                utilitairePlageCellule.ecrireChaine(enseignementCurseur, temporaire, monEnseignement.getNom(), enseignementStyle);
                 enseignementCurseur = new CoordonneesCelulle("B", enseignementCurseur.getY() + 1 + monEnseignement.getVariete());
 
 
@@ -864,7 +863,7 @@ public class MaquetteEcriture {
             ArrayList<UniteEnseignement> UniteEnseignementListe = maquetteComplete.getListeUniteEnseignement();
 
             for (UniteEnseignement curseurUE : UniteEnseignementListe) {
-                if (curseurUE.getNomUnite() == null) {
+                if (curseurUE.getNom() == null) {
                     throw new IllegalArgumentException("nom d'UE manquant");
                 }
 
@@ -875,7 +874,7 @@ public class MaquetteEcriture {
 
                     for (Enseignement curseurEnseignement : enseignementListe) {
 
-                        if (curseurEnseignement.getNomEnseignement() == null) {
+                        if (curseurEnseignement.getNom() == null) {
                             throw new IllegalArgumentException("nom d'enseignement manquant");
                         }
 

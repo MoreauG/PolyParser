@@ -10,26 +10,26 @@ import java.util.ArrayList;
  */
 public class UniteEnseignement {
 
-    private String nomUnite;
+    private String nom;
     private ArrayList<Enseignement> enseignementList = new ArrayList();
 
     /**
      * unique Constructeur, permet d'instancier un module a l'aide de son nom
      *
-     * @param nomUnite, le nom de l'UE
+     * @param nom, le nom de l'UE
      */
-    public UniteEnseignement(String nomUnite) {
-        this.nomUnite = nomUnite;
+    public UniteEnseignement(String nom) {
+        this.nom = nom;
 
     }
 
     /**
      * Fonction permettant d'obtenir le nom de l'unite d'enseignement
      *
-     * @return nomUnite, le nom de l'UE
+     * @return nom, le nom de l'UE
      */
-    public String getNomUnite() {
-        return nomUnite;
+    public String getNom() {
+        return nom;
     }
 
     /**
